@@ -202,19 +202,23 @@ const ExploreUs: React.FC = () => {
         </div>
 
         {/* ── Scroll track with edge fades ── */}
-        <div className="relative">
+        <div className="relative" style={{ overflowY: 'visible' }}>
           {/* Left fade */}
           <div
-            className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 z-10 transition-opacity duration-300"
+            className="pointer-events-none absolute left-0 z-10 transition-opacity duration-300"
             style={{
-              background: 'linear-gradient(to right, var(--tw-gradient-from, #0F1F33) 0%, transparent 100%)',
+              top: '-4px', bottom: '-4px',
+              width: '72px',
+              background: 'linear-gradient(to right, #0d1b2e 0%, transparent 100%)',
               opacity: canLeft ? 1 : 0,
             }}
           />
           {/* Right fade */}
           <div
-            className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 z-10 transition-opacity duration-300"
+            className="pointer-events-none absolute right-0 z-10 transition-opacity duration-300"
             style={{
+              top: '-4px', bottom: '-4px',
+              width: '96px',
               background: 'linear-gradient(to left, #0a1628 0%, transparent 100%)',
               opacity: canRight ? 1 : 0,
             }}
@@ -226,8 +230,8 @@ const ExploreUs: React.FC = () => {
             onMouseEnter={() => pauseScroll(6000)}
             onMouseLeave={() => { pausedRef.current = false; }}
             onTouchStart={() => pauseScroll(6000)}
-            className="flex gap-5 overflow-x-auto px-6 pb-3 select-none"
-            style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="flex gap-5 overflow-x-auto px-6 pt-4 pb-4 select-none"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', overflowY: 'visible' }}
           >
             {/* XL container centering spacer */}
             <div className="flex-shrink-0 w-[calc((100vw-80rem)/2)] max-w-0 hidden xl:block" />
@@ -246,13 +250,12 @@ const ExploreUs: React.FC = () => {
                   className={`flex-shrink-0 w-[290px] md:w-[310px] rounded-2xl relative overflow-hidden group bg-gradient-to-br ${item.bg}`}
                   style={{
                     height: '300px',
-                    scrollSnapAlign: 'start',
                     border: isHovered
                       ? `1.5px solid ${item.accent}60`
                       : isActive
                       ? `1.5px solid ${item.accent}30`
                       : '1.5px solid rgba(255,255,255,0.06)',
-                    transform: isHovered ? 'translateY(-10px) scale(1.02)' : 'translateY(0) scale(1)',
+                    transform: isHovered ? 'translateY(-8px) scale(1.015)' : 'translateY(0) scale(1)',
                     boxShadow: isHovered
                       ? `0 28px 52px rgba(0,0,0,0.55), 0 0 36px ${item.accent}28`
                       : isActive
