@@ -88,7 +88,7 @@ const Placements: React.FC = () => {
   );
 
   return (
-    <section ref={sectionRef} className="relative bg-slate-950 text-white overflow-hidden">
+    <section ref={sectionRef} className="relative bg-brand-dark text-white overflow-hidden">
 
       {/* Lamp Header */}
       <LampContainer className="pt-10 pb-0 min-h-[320px]">
@@ -102,7 +102,7 @@ const Placements: React.FC = () => {
             <div className="w-8 h-0.5 bg-brand-gold"></div>
             <div className="w-8 h-0.5 bg-brand-gold"></div>
           </div>
-          <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight bg-gradient-to-br from-amber-200 via-brand-gold to-amber-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight bg-gradient-to-br from-nova-white via-brand-gold to-brand-gold-light bg-clip-text text-transparent">
             Placement Excellence
           </h2>
           <p className="text-white/50 mt-3 text-sm md:text-base max-w-md">
@@ -111,16 +111,15 @@ const Placements: React.FC = () => {
         </motion.div>
       </LampContainer>
 
-      {/* Chart Section */}
-      <div className="relative py-12 md:py-16 bg-gradient-to-b from-slate-950 to-brand-dark">
-        {/* Background image */}
+      {/* ── Chart Section ── */}
+      <div className="relative py-10 md:py-14 bg-gradient-to-b from-brand-dark to-brand-navy">
         <div className="absolute inset-0 z-0">
           <img
             src="/Images/PLACEMENT/Placement_Background.jpg"
             alt="Placements Background"
             className="w-full h-full object-cover opacity-10"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/90 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-dark/90 to-transparent"></div>
         </div>
 
         <div className="container mx-auto px-4 md:px-8 relative z-10">
