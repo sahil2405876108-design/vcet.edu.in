@@ -16,6 +16,7 @@ import Gallery from './components/Gallery';
 import Testimonials from './components/Testimonials';
 import Facilities from './components/Facilities';
 import Footer from './components/Footer';
+import SplashScreen from './components/SplashScreen';
 
 /* ── Lazy-loaded Pages ── */
 // About Us
@@ -148,6 +149,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen font-sans bg-white text-slate-800">
+      <SplashScreen />
       <div className="sticky top-0 z-[100] md:contents">
         <TopBanner />
         <Header />
