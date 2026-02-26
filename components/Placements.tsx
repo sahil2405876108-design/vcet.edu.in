@@ -10,7 +10,8 @@ const placementData = [
   { year: '2021-22', count: 257 },
   { year: '2022-23', count: 261 },
   { year: '2023-24', count: 228 },
-  { year: '2024-25*', count: 188 },
+  { year: '2024-25', count: 241 },
+  { year: '2025-26*', count: 140 },
 ];
 
 const CHART_H = 260; // px — usable bar area height
@@ -106,7 +107,7 @@ const Placements: React.FC = () => {
             Placement Excellence
           </h2>
           <p className="text-white/50 mt-3 text-sm md:text-base max-w-md">
-            1800+ students placed — consistent career success across academic years
+            2300+ students placed — consistent career success across academic years
           </p>
         </motion.div>
       </LampContainer>

@@ -447,21 +447,21 @@ const Hero: React.FC = () => {
             className="relative flex flex-col items-center max-h-[96vh] max-w-[95vw] w-full mx-4"
             onClick={e => e.stopPropagation()}
           >
-            {/* Close */}
-            <button
-              onClick={() => setPackagesOpen(false)}
-              className="absolute -top-4 -right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white shadow-lg hover:bg-gray-100 transition-colors"
-            >
-              <X className="w-5 h-5 text-gray-700" />
-            </button>
-
-            {/* Image */}
-            <img
-              src={packageImages[packageIndex].src}
-              alt={packageImages[packageIndex].label}
-              className="w-full h-auto block shadow-2xl"
-              style={{ maxHeight: '88vh', objectFit: 'contain', width: '100%' }}
-            />
+            {/* Image with close button pinned to its top-right corner */}
+            <div className="relative inline-block">
+              <img
+                src={packageImages[packageIndex].src}
+                alt={packageImages[packageIndex].label}
+                className="w-full h-auto block shadow-2xl"
+                style={{ maxHeight: '88vh', objectFit: 'contain', width: '100%' }}
+              />
+              <button
+                onClick={() => setPackagesOpen(false)}
+                className="absolute top-2 right-2 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white shadow-lg hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-700" />
+              </button>
+            </div>
 
             {/* Navigation dots + arrows */}
             <div className="flex items-center gap-4 mt-4">
