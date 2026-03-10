@@ -30,21 +30,22 @@ export default function GoverningCouncil() {
       <div className="w-full bg-white min-h-screen font-sans">
 
         {/* Blue Hero Header */}
-        <div className="bg-[#1a4b7c] py-16 md:py-24 px-6 md:px-12 relative overflow-hidden">
+        <div className="bg-[#1a4b7c] pt-4 pb-16 md:pb-24 px-6 md:px-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl pointer-events-none" />
 
-          <div className="max-w-5xl mx-auto text-left relative z-10">
-            {/* Breadcrumb */}
-            <div className="flex items-center justify-start text-sm text-blue-200/80 mb-8 gap-2 font-medium">
-              <Home className="w-4 h-4" />
-              <ChevronRight className="w-4 h-4" />
-              <span className="hover:text-white cursor-pointer transition-colors">About Us</span>
-              <ChevronRight className="w-4 h-4" />
-              <span className="text-[#fdb813]">Governing Council</span>
-            </div>
+          {/* Breadcrumb — top left */}
+          <div className="relative z-10 flex items-center text-sm text-blue-200/80 gap-2 font-medium mb-10">
+            <Home className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4" />
+            <span className="hover:text-white cursor-pointer transition-colors">About Us</span>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-[#fdb813]">Governing Council</span>
+          </div>
 
-            {/* Eyebrow */}
+          <div className="max-w-5xl mx-auto text-left relative z-10">
+
+            {/* Eyebrow */
             <div className="flex items-center justify-start gap-3 mb-6">
               <div className="w-12 h-px bg-[#fdb813]" />
               <p className="font-sans text-xs tracking-[0.3em] text-[#fdb813] font-bold uppercase">
