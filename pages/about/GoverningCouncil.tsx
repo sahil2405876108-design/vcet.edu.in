@@ -109,7 +109,7 @@ export default function GoverningCouncil() {
                 <div className="flex-1 h-px bg-gray-200" />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+              <div className="flex flex-col gap-6">
                 {members.map((member) => (
                   <div key={member.id} className="flex items-center gap-5 group">
                     {/* Serial number */}
