@@ -569,7 +569,7 @@ Your commit history tells the story of this project. Write commit messages as if
 
 ## Contributors
 
-This project is built by an amazing team of developers committed to creating a world-class website for VCET. Special thanks to:
+This project is built by an amazing team of developers committed to creating a website for VCET. Special thanks to:
 
 | # | Contributor | GitHub |
 |---|-------------|--------|
