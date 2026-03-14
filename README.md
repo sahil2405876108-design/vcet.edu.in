@@ -586,5 +586,5 @@ This project is built by an amazing team of developers committed to creating a w
 
 ### How to contribute
 
-If you would like to contribute to this project, please follow the guidelines outlined in the [Contributing — Git Workflow](#contributing--git-workflow) and [GitHub Rules and Engineering Standards](#github-rules-and-engineering-standards) sections above. We welcome bug reports, feature suggestions, and pull requests from the community.
+If you would like to contribute to this project, please follow the guidelines outlined in the [Contributing — Git Workflow](#contributing--git-workflow) and [GitHub Rules and Engineering Standards](#github-rules-and-engineering-standards) sections above as. We welcome bug reports, feature suggestions, and pull requests from the community.
 
