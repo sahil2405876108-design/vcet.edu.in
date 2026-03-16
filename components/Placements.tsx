@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'motion/react';
 import { LampContainer } from '../ui/lamp';
+import { usePlacements } from '../hooks/usePlacements';
 
-const placementData = [
+const DEFAULT_PLACEMENT_DATA = [
   { year: '2017-18', count: 299 },
   { year: '2018-19', count: 320 },
   { year: '2019-20', count: 263, isCovid: true },
@@ -16,16 +17,46 @@ const placementData = [
 
 const CHART_H = 260; // px — usable bar area height
 
+const COVID_YEARS = [2019, 2020, 2021];
+
 const Placements: React.FC = () => {
+  const { placements } = usePlacements();
+  
+  const finalData = React.useMemo(() => {
+    if (!placements || placements.length === 0) return DEFAULT_PLACEMENT_DATA;
+    
+    const CURRENT_YEAR = new Date().getFullYear();
+    const grouped = placements.reduce((acc, curr) => {
+      acc[curr.year] = (acc[curr.year] || 0) + curr.student_count;
+      return acc;
+    }, {} as Record<number, number>);
+
+    return Object.entries(grouped)
+      .map(([yrStr, count]) => {
+        const y = parseInt(yrStr, 10);
+        const suffix = y >= CURRENT_YEAR ? '*' : '';
+        return {
+          year: `${y}-${(y + 1).toString().slice(2)}${suffix}`,
+          count,
+          isCovid: COVID_YEARS.includes(y),
+        };
+      })
+      .sort((a, b) => parseInt(a.year) - parseInt(b.year));
+  }, [placements]);
+
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [animatedCounts, setAnimatedCounts] = useState<number[]>(placementData.map(() => 0));
+  const [animatedCounts, setAnimatedCounts] = useState<number[]>([]);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDown, setIsDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  useEffect(() => {
+    setAnimatedCounts(finalData.map(() => 0));
+  }, [finalData]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,12 +68,12 @@ const Placements: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || finalData.length === 0) return;
     const duration = 1800;
     const steps = 72;
     const stepDuration = duration / steps;
     const timers: ReturnType<typeof setInterval>[] = [];
-    placementData.forEach((item, index) => {
+    finalData.forEach((item, index) => {
       const delay = index * 100;
       setTimeout(() => {
         let currentStep = 0;
@@ -62,7 +93,7 @@ const Placements: React.FC = () => {
       }, delay);
     });
     return () => timers.forEach(t => clearInterval(t));
-  }, [isVisible]);
+  }, [isVisible, finalData]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
@@ -79,11 +110,11 @@ const Placements: React.FC = () => {
     scrollRef.current.scrollLeft = scrollLeft - (x - startX) * 2;
   };
 
-  const maxCount = Math.max(...placementData.map(d => d.count));
-  const maxIdx   = placementData.findIndex(d => d.count === maxCount);
-  const covidIndices = placementData.map((d, i) => d.isCovid ? i : -1).filter(i => i !== -1);
-  const covidStartIdx = covidIndices[0];
-  const covidEndIdx   = covidIndices[covidIndices.length - 1];
+  const maxCount = Math.max(...finalData.map(d => d.count), 1);
+  const maxIdx   = finalData.findIndex(d => d.count === maxCount);
+  const covidIndices = finalData.map((d, i) => d.isCovid ? i : -1).filter(i => i !== -1);
+  // default to index 0 if not found so UI doesn't crash on slice
+  const covidStartIdx = covidIndices.length > 0 ? covidIndices[0] : 0;
 
   return (
     <section id="placements" ref={sectionRef} className="relative bg-brand-dark text-white overflow-hidden">
@@ -147,7 +178,7 @@ const Placements: React.FC = () => {
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/25 text-brand-gold text-xs font-semibold tracking-wide">
                 <span className="w-2 h-2 rounded-full bg-brand-gold animate-pulse" />
-                Peak: {maxCount} &nbsp;·&nbsp; {placementData[maxIdx].year}
+                Peak: {maxCount} &nbsp;·&nbsp; {finalData[maxIdx > -1 ? maxIdx : 0]?.year}
               </div>
             </div>
 
@@ -187,7 +218,7 @@ const Placements: React.FC = () => {
                       </div>
                     );
                   })()}
-                {placementData.map((item, index) => {
+                {finalData.map((item, index) => {
                     const barH = (item.count / maxCount) * CHART_H * 0.92;
                     const isPeak = index === maxIdx;
                     const isCurrent = item.year.includes('*');
@@ -282,7 +313,7 @@ const Placements: React.FC = () => {
                   className="absolute bottom-0 flex items-center gap-5 md:gap-8 px-2 pl-12"
                   style={{ height: '36px' }}
                 >
-                  {placementData.map((item, index) => (
+                  {finalData.map((item, index) => (
                     <div
                       key={index}
                       style={{

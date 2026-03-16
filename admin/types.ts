@@ -99,6 +99,7 @@ export interface Event {
   is_active: boolean;
   expiry_date: string | null;
   expiry_time: string | null;
+  attachment: string | null;
   created_at: string;
   updated_at: string;
 }
