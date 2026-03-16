@@ -64,7 +64,6 @@ const IEEE: React.FC = () => {
       <PageBanner
         title="IEEE"
         breadcrumbs={[
-          { label: 'Student Life', href: '/student-life' },
           { label: 'IEEE' },
         ]}
       />
