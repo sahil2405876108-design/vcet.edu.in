@@ -101,14 +101,15 @@ const DeptCivil: React.FC = () => {
           {/* ════ ABOUT ════════════════════════════════════════════ */}
           {activeId === 'about' && (
             <section className="reveal bg-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-sm border border-slate-100">
-              <div className="space-y-6 text-slate-600 leading-8 text-left">
-                <div className="mx-auto w-full max-w-xs rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 text-center">
-                  <div className="mx-auto h-52 w-44 rounded-xl bg-white border border-slate-200 flex items-center justify-center">
-                    <i className="ph ph-user-circle text-6xl text-slate-300" />
-                  </div>
+              <div className="mb-8 flex flex-col items-center text-center">
+                <div className="w-full max-w-[340px] rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-12">
+                  <i className="ph ph-image text-4xl text-slate-400" />
                   <p className="mt-3 text-sm font-semibold text-slate-500">HOD Image Placeholder</p>
+                  <p className="mt-1 text-xs text-slate-400">Add image later in this area</p>
                 </div>
-                <p className="text-lg font-bold text-brand-navy">Dr. Ajay Sudhir Radke</p>
+                <p className="mt-4 text-2xl font-bold text-brand-navy">Dr. Ajay Sudhir Radke</p>
+              </div>
+              <div className="space-y-6 text-slate-600 leading-8 text-left">
                 <p>
                   A warm welcome to the Civil Engineering department. The department of the Civil engineering is established in the 2013 in the Vidyavardhini&apos;s College of Engineering and Technology. The Civil Engineering department aims a topmost Institution by generating professional with higher degree of technical knowledge, proficient skills and principled values.
                 </p>
@@ -730,16 +731,29 @@ const DeptCivil: React.FC = () => {
                     ))}
                   </div>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600 leading-7">
-                  <h4 className="text-lg font-bold text-brand-navy mb-3">Committee Details</h4>
-                  <div className="mb-4 w-full max-w-md rounded-2xl border-2 border-dashed border-slate-300 bg-white p-4">
-                    <div className="mx-auto h-64 w-52 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center">
-                      <i className="ph ph-user-circle text-7xl text-slate-300" />
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 md:p-6">
+                  <h4 className="text-lg font-bold text-brand-navy relative inline-block">
+                    Committee Details
+                    <span className="absolute -bottom-2 left-0 h-1 w-10 rounded-full bg-brand-gold" />
+                  </h4>
+                  <p className="mt-5 text-base font-semibold text-brand-navy">Staff Incharge</p>
+
+                  <div className="mt-6 flex justify-center">
+                    <div className="w-full max-w-[340px] rounded-2xl border-2 border-dashed border-slate-300 bg-white px-4 py-12 text-center">
+                      <i className="ph ph-image text-4xl text-slate-400" />
+                      <p className="mt-3 text-sm font-semibold text-slate-500">Staff Image Placeholder</p>
+                      <p className="mt-1 text-xs text-slate-400">Add image later in this area</p>
                     </div>
-                    <p className="mt-3 text-center text-sm font-semibold text-slate-500">Committee Staff Image Placeholder</p>
                   </div>
-                  <p><span className="font-semibold text-brand-navy">Staff Incharge:</span> Dr. Viren Chandanshive</p>
-                  <p className="mt-1"><span className="font-semibold text-brand-navy">Email:</span> viren.chandanshive@vcet.edu.in</p>
+
+                  <div className="mt-5 text-center">
+                    <p className="text-2xl font-bold text-brand-navy">Dr. Viren Chandanshive</p>
+                    <p className="mt-2 text-sm text-slate-600">Civil Engineering</p>
+                    <p className="mt-3 text-sm text-slate-700">
+                      <i className="ph ph-envelope mr-2 text-brand-gold align-middle" />
+                      <span className="align-middle">viren.chandanshive@vcet.edu.in</span>
+                    </p>
+                  </div>
                 </div>
               </section>
             );
