@@ -101,12 +101,12 @@ const GalleryList: React.FC = () => {
           <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 mb-1 uppercase tracking-widest">
             <Link to="/admin" className="hover:text-slate-600 transition-colors">Dashboard</Link>
             <span className="text-slate-300 font-normal">/</span>
-            <span className="text-slate-600">Hero galleries</span>
+            <span className="text-slate-600">Galleries</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-[#111827]">Hero galleries</h1>
+          <h1 className="text-3xl font-extrabold text-[#111827]">Galleries</h1>
         </div>
         <Link 
-          to="/admin/hero-galleries/new" 
+          to="/admin/galleries/new" 
           className="bg-[#1e293b] hover:bg-[#0f172a] text-white font-bold px-6 py-3 rounded-full text-sm transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
@@ -205,7 +205,7 @@ const GalleryList: React.FC = () => {
                             </svg>
                           )}
                         </button>
-                        <Link to={`/admin/hero-galleries/${gallery.id}/edit`} className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all" title="Edit">
+                        <Link to={`/admin/galleries/${gallery.id}/edit`} className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all" title="Edit">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         </Link>
                         <button 

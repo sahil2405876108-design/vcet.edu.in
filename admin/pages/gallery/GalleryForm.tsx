@@ -43,7 +43,7 @@ const GalleryForm: React.FC = () => {
       const payload: GalleryPayload = { ...form, ...(imageFile ? { image: imageFile } : {}) };
       if (isEdit) await galleriesApi.update(Number(id), payload);
       else await galleriesApi.create(payload);
-      navigate('/admin/hero-galleries');
+      navigate('/admin/galleries');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed');
     } finally {
@@ -64,7 +64,7 @@ const GalleryForm: React.FC = () => {
       <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-widest">
         <Link to="/admin" className="hover:text-slate-600 transition-colors">Dashboard</Link>
         <span className="text-slate-300 font-normal">/</span>
-        <Link to="/admin/hero-galleries" className="hover:text-slate-600 transition-colors">Hero galleries</Link>
+        <Link to="/admin/galleries" className="hover:text-slate-600 transition-colors">Galleries</Link>
         <span className="text-slate-300 font-normal">/</span>
         <span className="text-slate-600">{isEdit ? 'Edit' : 'New'}</span>
       </div>
@@ -74,7 +74,7 @@ const GalleryForm: React.FC = () => {
           {isEdit ? 'Edit' : 'Add New'} <span className="text-slate-400">Hero gallery</span>
         </h1>
         <button 
-          onClick={() => navigate('/admin/hero-galleries')}
+          onClick={() => navigate('/admin/galleries')}
           className="text-slate-400 hover:text-slate-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
@@ -187,7 +187,7 @@ const GalleryForm: React.FC = () => {
               {isEdit ? 'Update gallery' : 'Publish gallery'}
             </button>
             <button
-              onClick={() => navigate('/admin/hero-galleries')}
+              onClick={() => navigate('/admin/galleries')}
               className="w-full bg-slate-800 text-slate-400 font-bold py-4 rounded-2xl text-xs uppercase tracking-widest transition-all hover:bg-slate-700 hover:text-white"
             >
               Discard Changes
