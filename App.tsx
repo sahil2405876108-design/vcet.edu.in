@@ -117,6 +117,7 @@ const SCSTCommittee = lazy(() => import('./pages/committees/SCSTCommittee'));
 const InternalComplaint = lazy(() => import('./pages/committees/InternalComplaint'));
 const EqualOpportunity = lazy(() => import('./pages/committees/EqualOpportunity'));
 const SEDGCell = lazy(() => import('./pages/committees/SEDGCell'));
+const Developers = lazy(() => import('./pages/committees/Developers'));
 
 // pages/naac
 const SSS = lazy(() => import('./pages/naac/SSS'));
@@ -375,6 +376,7 @@ function App() {
             <Route path="/internal-complaint" element={<InternalComplaint />} />
             <Route path="/equal-opportunity" element={<EqualOpportunity />} />
             <Route path="/sedg-cell" element={<SEDGCell />} />
+            <Route path="/developers" element={<Developers />} />
 
           {/* NAAC */}
           {/* <Route path="/naac-ssr-cycle-1" element={<NaacPage />} /> */}
