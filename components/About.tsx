@@ -2,14 +2,14 @@ import React, { useRef, useState, useEffect } from 'react';
 import SectionHeader from './SectionHeader';
 import { Target, Eye, Users, BookOpen, MapPin, ShieldCheck, Sparkles } from 'lucide-react';
 
-const ESTABLISHED_YEAR = 1994;
+const ESTABLISHED_DATE = new Date(1994, 6, 1); // July 1994
 const currentYear = new Date().getFullYear();
-const yearsSinceEstablished = Math.max(currentYear - ESTABLISHED_YEAR, 1);
+const yearsSinceEstablished = Math.max(currentYear - ESTABLISHED_DATE.getFullYear(), 1);
 
 const stats = [
   { icon: Users, target: 5000, suffix: '+', label: 'Students' },
   { icon: BookOpen, target: 200, suffix: '+', label: 'Faculty' },
-  { icon: Target, target: yearsSinceEstablished, suffix: '+', label: 'Years' },
+  { icon: Target, target: yearsSinceEstablished, suffix: '', label: 'Years' },
 ];
 
 function useCountUp(target: number | null, duration = 1800) {
