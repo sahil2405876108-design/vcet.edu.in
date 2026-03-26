@@ -7,6 +7,33 @@ interface DepartmentFacultySectionProps {
   departmentName: string;
 }
 
+const getInitials = (name: string) => {
+  const cleanName = name.replace(/^(Dr\.|Mr\.|Ms\.|Mrs\.|Prof\.)\s*/i, '').trim();
+  const parts = cleanName.split(' ').filter(Boolean);
+  return (parts[0]?.[0] || '') + (parts[1]?.[0] || parts[0]?.[1] || '').toUpperCase();
+};
+
+const ImageWithFallback: React.FC<{ url?: string; name: string }> = ({ url, name }) => {
+  const [error, setError] = useState(false);
+
+  if (url && !error) {
+    return (
+      <img
+        src={url}
+        alt={name}
+        onError={() => setError(true)}
+        className="w-full h-full object-cover object-top"
+      />
+    );
+  }
+
+  return (
+    <div className="w-full h-full bg-[#1a4b7c] flex items-center justify-center text-white font-bold text-3xl uppercase tracking-wider">
+      {getInitials(name)}
+    </div>
+  );
+};
+
 const DepartmentFacultySection: React.FC<DepartmentFacultySectionProps> = ({ departmentName }) => {
   const [faculty, setFaculty] = useState<Faculty[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,8 +80,8 @@ const DepartmentFacultySection: React.FC<DepartmentFacultySectionProps> = ({ dep
         <div className="flex items-center divide-x divide-slate-200">
           {[
             { icon: 'ph-users-three',    value: `${faculty.length}`, label: 'Members' },
-            { icon: 'ph-graduation-cap', value: `${faculty.filter(f => f.qualifications.degrees.some(d => d.toLowerCase().includes('ph.d') || d.toLowerCase().includes('doctor'))).length}`, label: 'PhD' },
-            { icon: 'ph-trophy',         value: `${faculty.reduce((s, f) => s + f.experience.teachingYears, 0)}+`, label: 'Yrs Exp.' },
+            { icon: 'ph-graduation-cap', value: `${faculty.filter(f => f.qualifications?.degrees?.some(d => d.toLowerCase().includes('ph.d') || d.toLowerCase().includes('doctor'))).length}`, label: 'PhD' },
+            { icon: 'ph-trophy',         value: `${faculty.reduce((s, f) => s + (f.experience?.teachingYears || 0), 0)}+`, label: 'Yrs Exp.' },
           ].map(stat => (
             <div key={stat.label} className="flex items-center gap-2.5 px-5">
               <i className={`ph-fill ${stat.icon} text-lg text-brand-navy`} />
@@ -80,19 +107,11 @@ const DepartmentFacultySection: React.FC<DepartmentFacultySectionProps> = ({ dep
             >
               {/* Photo with gold badge at bottom-right */}
               <div className="relative w-32 h-36 mb-4 shrink-0">
-                {f.profileImage?.url ? (
-                  <img
-                    src={f.profileImage.url}
-                    alt={f.basicInfo.fullName}
-                    className="w-full h-full object-cover object-top"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-[#1a4b7c] flex items-center justify-center text-white font-bold text-2xl uppercase">
-                    {f.basicInfo.fullName.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                  </div>
-                )}
+                <div className="w-full h-full overflow-hidden rounded-t-sm shadow-sm border border-slate-100">
+                  <ImageWithFallback url={f.profileImage?.url} name={f.basicInfo.fullName} />
+                </div>
                 {/* Gold accent square */}
-                <div className="absolute bottom-0 right-0 w-5 h-5 bg-[#fdb813]" />
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#fdb813] shadow-sm" />
               </div>
 
               {/* Name */}
