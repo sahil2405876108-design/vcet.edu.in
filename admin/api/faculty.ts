@@ -1,36 +1,50 @@
-import { client } from './client';
 import type { ListResponse, ItemResponse, DeleteResponse, Faculty, FacultyPayload } from '../types';
-import { createMockCrud, MOCK_FACULTY } from './mockStore';
 
-const USE_MOCK = import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === 'true';
-const mock = USE_MOCK ? createMockCrud<Faculty>(MOCK_FACULTY, 'vcet_mock_faculty') : null;
+const FACULTY_API_BASE = 'http://localhost:5000/api/faculty';
+
+/**
+ * Custom request helper for Faculty API since it's a different backend than Laravel.
+ */
+async function facultyRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const url = `${FACULTY_API_BASE}${path}`;
+  const res = await fetch(url, options);
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || json.message || `HTTP ${res.status}`);
+  return json as T;
+}
 
 export const facultyApi = {
-  list: USE_MOCK
-    ? () => mock!.list()
-    : () => client.request<ListResponse<Faculty>>('/faculty/all'),
+  list: () => facultyRequest<ListResponse<Faculty>>('/'),
 
-  get: USE_MOCK
-    ? (id: number) => mock!.get(id)
-    : (id: number) => client.request<ItemResponse<Faculty>>(`/faculty/${id}`),
+  get: (id: string) => facultyRequest<ItemResponse<Faculty>>(`/${id}`),
 
-  create: USE_MOCK
-    ? (payload: FacultyPayload) => mock!.create(payload as unknown as Partial<Faculty>)
-    : (payload: FacultyPayload) =>
-        client.request<ItemResponse<Faculty>>('/faculty', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        }),
+  create: (payload: FacultyPayload) => {
+    const formData = new FormData();
+    if (payload.profileImage) {
+      formData.append('profileImage', payload.profileImage);
+      delete payload.profileImage;
+    }
+    formData.append('data', JSON.stringify(payload));
 
-  update: USE_MOCK
-    ? (id: number, payload: FacultyPayload) => mock!.update(id, payload as unknown as Partial<Faculty>)
-    : (id: number, payload: FacultyPayload) =>
-        client.request<ItemResponse<Faculty>>(`/faculty/${id}`, {
-          method: 'PUT',
-          body: JSON.stringify(payload),
-        }),
+    return facultyRequest<ItemResponse<Faculty>>('/', {
+      method: 'POST',
+      body: formData,
+    });
+  },
 
-  delete: USE_MOCK
-    ? (id: number) => mock!.delete(id)
-    : (id: number) => client.request<DeleteResponse>(`/faculty/${id}`, { method: 'DELETE' }),
+  update: (id: string, payload: FacultyPayload) => {
+    const formData = new FormData();
+    if (payload.profileImage) {
+      formData.append('profileImage', payload.profileImage);
+      delete payload.profileImage;
+    }
+    formData.append('data', JSON.stringify(payload));
+
+    return facultyRequest<ItemResponse<Faculty>>(`/${id}`, {
+      method: 'PUT',
+      body: formData,
+    });
+  },
+
+  delete: (id: string) => facultyRequest<DeleteResponse>(`/${id}`, { method: 'DELETE' }),
 };
