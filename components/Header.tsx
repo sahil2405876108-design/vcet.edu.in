@@ -10,7 +10,8 @@ const CAREER_AT_VCET_PDF_URL =
 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 interface SubItem {
   label: string;
-  href: string;
+  href?: string;
+  subItems?: SubItem[];
 }
 
 interface DropdownItem {
@@ -162,14 +163,18 @@ const menuGroups: MenuGroup[] = [
     dropdown: [
       { label: 'Career @ VCET',          href: '/career-at-vcet' },
       {
-        label: 'Extra Curricular',
+        label: 'Extra curricular Activities',
         subItems: [
-          { label: "Student's Council", href: '/students-council' },
-          { label: 'Cultural Committee', href: '/cultural-committee' },
-          { label: 'Sports Committee', href: '/sports-committee' },
-          { label: 'Literati', href: '/literati' },
-          { label: 'NSS', href: '/nss' },
-          { label: 'EBSB', href: '/ebsb' },
+          {
+            label: "Student's Council",
+            subItems: [
+              { label: 'Cultural Committee', href: '/cultural-committee' },
+              { label: 'Sports Committee', href: '/sports-committee' },
+              { label: 'Literati', href: '/literati' },
+              { label: 'NSS', href: '/nss' },
+              { label: 'EBSB', href: '/ebsb' },
+            ],
+          },
         ],
       },
       {
@@ -391,8 +396,7 @@ function buildSearchIndex(): SearchEntry[] {
         // Sub-items
         if (item.subItems) {
           for (const sub of item.subItems) {
-            // Avoid duplicates — only add if this exact href+label isn't already present
-            if (!entries.some(e => e.href === sub.href && e.label === sub.label)) {
+            if (sub.href && !entries.some(e => e.href === sub.href && e.label === sub.label)) {
               entries.push({
                 label: sub.label,
                 href: sub.href,
@@ -400,6 +404,19 @@ function buildSearchIndex(): SearchEntry[] {
                 keywords: keywordMap[sub.href] || [],
                 external: sub.href.startsWith('http'),
               });
+            }
+            if (sub.subItems) {
+              for (const deepSub of sub.subItems) {
+                if (deepSub.href && !entries.some(e => e.href === deepSub.href && e.label === deepSub.label)) {
+                  entries.push({
+                    label: deepSub.label,
+                    href: deepSub.href,
+                    category: group.label,
+                    keywords: keywordMap[deepSub.href] || [],
+                    external: deepSub.href.startsWith('http'),
+                  });
+                }
+              }
             }
           }
         }
@@ -465,6 +482,44 @@ function searchPages(query: string): SearchEntry[] {
    DESKTOP DROPDOWN ITEM
    Supports accordion for sub-items
 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const NestedFlyout: React.FC<{ sub: SubItem }> = ({ sub }) => {
+  const [open, setOpen] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openSub = () => { if(timer.current) clearTimeout(timer.current); setOpen(true); };
+  const closeSub = () => { timer.current = setTimeout(() => setOpen(false), 200); };
+  const keepSub = () => { if(timer.current) clearTimeout(timer.current); };
+  
+  return (
+    <div className="relative group/nested" onMouseEnter={openSub} onMouseLeave={closeSub}>
+      <div className="flex items-center justify-between px-4 py-2.5 text-[11.5px] text-slate-600 hover:text-brand-blue hover:bg-brand-blue/5 transition-all duration-150 border-l-2 border-transparent hover:border-brand-gold cursor-pointer select-none">
+        <div className="flex items-center gap-2.5">
+           <span className="w-1.5 h-1.5 rounded-full bg-brand-gold/40 flex-shrink-0" />
+           {sub.label}
+        </div>
+        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${open ? 'text-brand-blue translate-x-1' : 'text-brand-gold/50'}`} />
+      </div>
+      
+      <div
+        onMouseEnter={keepSub} onMouseLeave={closeSub}
+        className={`absolute top-0 left-full ml-1 z-[410] transition-all duration-250 ${open ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 -translate-x-2 pointer-events-none'}`}
+      >
+        <div className="bg-white rounded-xl shadow-2xl border border-gray-100 min-w-[200px] py-2 ring-1 ring-black/5">
+          {sub.subItems!.map(child => {
+             const isInternal = child.href?.startsWith('/');
+             const cls = "flex items-center gap-2.5 px-4 py-2.5 text-[11.5px] text-slate-600 hover:text-brand-blue hover:bg-brand-blue/5 transition-all duration-150 border-l-2 border-transparent hover:border-brand-gold group";
+             const dot = <span className="w-1.5 h-1.5 rounded-full bg-brand-gold/40 flex-shrink-0 group-hover:bg-brand-blue transition-colors duration-150" />;
+             return isInternal ? (
+               <Link key={child.label} to={child.href!} className={cls}>{dot}{child.label}</Link>
+             ) : (
+               <a key={child.label} href={child.href!} className={cls} target="_blank" rel="noopener noreferrer">{dot}{child.label}</a>
+             );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface DesktopDropdownItemProps {
   item: DropdownItem;
   /** flip sub-panel to left when parent dropdown is near right edge */
@@ -548,16 +603,19 @@ const DesktopDropdownItem: React.FC<DesktopDropdownItemProps> = ({ item, flipSub
             </div>
             <div className="h-px bg-gray-100 mx-3 mb-1" />
             {item.subItems.map((sub) => {
-              const isInternal = sub.href.startsWith('/');
+              if (sub.subItems && sub.subItems.length > 0) {
+                return <NestedFlyout key={sub.label} sub={sub} />;
+              }
+              const isInternal = sub.href?.startsWith('/');
               const cls = "flex items-center gap-2.5 px-4 py-2.5 text-[11.5px] text-slate-600 hover:text-brand-blue hover:bg-brand-blue/5 transition-all duration-150 border-l-2 border-transparent hover:border-brand-gold group";
               const dot = <span className="w-1.5 h-1.5 rounded-full bg-brand-gold/40 flex-shrink-0 group-hover:bg-brand-blue transition-colors duration-150" />;
               return isInternal ? (
-                <Link key={sub.label} to={sub.href} className={cls}>
+                <Link key={sub.label} to={sub.href!} className={cls}>
                   {dot}
                   {sub.label}
                 </Link>
               ) : (
-                <a key={sub.label} href={sub.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                <a key={sub.label} href={sub.href!} target="_blank" rel="noopener noreferrer" className={cls}>
                   {dot}
                   {sub.label}
                 </a>
@@ -595,6 +653,31 @@ const DesktopDropdownItem: React.FC<DesktopDropdownItemProps> = ({ item, flipSub
 /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    MOBILE ACCORDION ITEM
 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const MobileNestedAccordionItem: React.FC<{ sub: SubItem, onClose: () => void }> = ({ sub, onClose }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-2 text-[12px] font-medium text-white/50 hover:text-brand-gold transition-colors">
+        <span>{sub.label}</span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div className="overflow-hidden transition-all duration-300" style={{ maxHeight: open ? `${sub.subItems!.length * 36}px` : '0px' }}>
+        <div className="pl-3 border-l border-brand-gold/20 ml-1 space-y-0.5 mt-1">
+          {sub.subItems!.map(child => {
+            const isInternal = child.href?.startsWith('/');
+            const cls = "block py-1.5 text-[11px] text-white/40 hover:text-brand-gold transition-colors";
+            return isInternal ? (
+              <Link key={child.label} to={child.href!} onClick={onClose} className={cls}>{child.label}</Link>
+            ) : (
+              <a key={child.label} href={child.href!} onClick={onClose} target="_blank" rel="noopener noreferrer" className={cls}>{child.label}</a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface MobileAccordionItemProps {
   item: DropdownItem;
   onClose: () => void;
@@ -630,11 +713,14 @@ const MobileAccordionItem: React.FC<MobileAccordionItemProps> = ({ item, onClose
         >
           <div className="pl-4 border-l border-brand-gold/30 ml-2 space-y-0.5">
             {item.subItems.map((sub) => {
-              const isInternal = sub.href.startsWith('/');
+              if (sub.subItems && sub.subItems.length > 0) {
+                return <MobileNestedAccordionItem key={sub.label} sub={sub} onClose={onClose} />;
+              }
+              const isInternal = sub.href?.startsWith('/');
               return isInternal ? (
                 <Link
                   key={sub.label}
-                  to={sub.href}
+                  to={sub.href!}
                   onClick={onClose}
                   className="block py-2 text-[12px] text-white/50 hover:text-brand-gold transition-colors"
                 >
@@ -643,7 +729,7 @@ const MobileAccordionItem: React.FC<MobileAccordionItemProps> = ({ item, onClose
               ) : (
                 <a
                   key={sub.label}
-                  href={sub.href}
+                  href={sub.href!}
                   onClick={onClose}
                   target="_blank"
                   rel="noopener noreferrer"
