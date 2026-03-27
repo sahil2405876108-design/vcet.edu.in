@@ -94,9 +94,21 @@ const CenterOfExcellenceSiemens: React.FC = () => {
                 <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-brand-gold">Siemens CoE</span>
               </div>
               <h3 className="text-2xl font-bold text-brand-navy mb-5 relative inline-block">About<span className="absolute -bottom-2 left-0 w-12 h-1 bg-brand-gold rounded-full" /></h3>
-              <p className="text-slate-600 leading-8">
-                The Center of Excellence - SIEMENS provides state-of-the-art facilities for research and training in industrial automation and digitalization. Content will be updated shortly!
-              </p>
+              <div className="space-y-6 text-slate-600 leading-8">
+                <p>
+                  The Center of Excellence - SIEMENS provides state-of-the-art facilities for research and training in industrial automation and digitalization.
+                </p>
+                <div className="bg-brand-navylight/30 p-6 rounded-2xl border border-brand-navylight">
+                  <h4 className="text-xl font-bold text-brand-navy mb-2">PLC Automation and Drives :</h4>
+                  <p>At VCET, we understand the importance of elevating student’s skills in adapting to newer challenges and value the returns of investing in technical skill enhancement. Since last year, Siemens Centre of excellence at VCET is established to provide training for our students in the field of Automation & Drives. The training module encompasses a wide range of courses designed for PLCs, Drives, Controls, HMI, Networks, Process Control, and more. Which subsequently translates into effective, flexible, and value based training and real results in productivity, cost reductions and process optimization. Through specific courses designed for students, each course schedule consists of well balanced theory and provides hands-on training to optimize the knowledge about the products. Our fleet of experienced trainers ensures that each participant makes a contribution towards productivity and performance improvement in this organization.
+This centre assist students to come up with their own new project ideas and implement them. Center is equipped with various kits of Siemens. kits are available under three sections which are as follows:
+
+SIMATIC S7 1200 PLC kit with HMI (A set of 6 kits package)
+SINAMICS G120 Trainer (set of 5 kits
+SINAMICS DCM 6RA80 Trainer with DC Motors (A set of 2 kits)
+Students can have hands on practice on these kits and learn about it.</p>
+                </div>
+              </div>
             </section>
           )}
 
@@ -107,9 +119,135 @@ const CenterOfExcellenceSiemens: React.FC = () => {
                 <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-brand-gold">Siemens CoE</span>
               </div>
               <h3 className="text-2xl font-bold text-brand-navy mb-5 relative inline-block">Objectives<span className="absolute -bottom-2 left-0 w-12 h-1 bg-brand-gold rounded-full" /></h3>
-              <p className="text-slate-600 leading-8">
-                Content will be updated shortly!
-              </p>
+              <div className="text-slate-600 leading-8 space-y-4">
+                <div className="space-y-2">
+                  <p className="font-semibold">Objectives :</p>
+                  <p>The main objective of Siemens Centre of Excellence is:</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>To bridge the gap between industry and academics.</li>
+                    <li>To provide a competitive edge by helping students to learn, analyze and apply theoretical concepts and develop industry-level technology.</li>
+                    <li>To provide experiential learning where students can solve real world problems using state-of-the-art technical material.</li>
+                  </ul>
+                </div>
+
+                <div className="mt-6">
+                  <h4 className="text-lg font-semibold text-brand-navy mb-3">Training Programs Conducted under Siemens CoE</h4>
+                  <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                    <table className="min-w-full text-sm text-left">
+                      <thead className="bg-slate-100 text-slate-800">
+                        <tr>
+                          <th className="px-4 py-3 border-b border-slate-200">Sr. No.</th>
+                          <th className="px-4 py-3 border-b border-slate-200">Event</th>
+                          <th className="px-4 py-3 border-b border-slate-200">No. of Participants</th>
+                          <th className="px-4 py-3 border-b border-slate-200">Period</th>
+                          <th className="px-4 py-3 border-b border-slate-200">No. of Days</th>
+                          <th className="px-4 py-3 border-b border-slate-200">Description</th>
+                          <th className="px-4 py-3 border-b border-slate-200">Resource Person</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">1</td>
+                          <td className="px-4 py-3 align-top">TTT Program for COE on Basic Drives</td>
+                          <td className="px-4 py-3 align-top">07</td>
+                          <td className="px-4 py-3 align-top">01/07/2019 to 05/07/2019</td>
+                          <td className="px-4 py-3 align-top">05</td>
+                          <td className="px-4 py-3 align-top">Teachers training program</td>
+                          <td className="px-4 py-3 align-top">Mr. Rohit Thakur, Trainer, SITRAIN, Siemens India Ltd.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">2</td>
+                          <td className="px-4 py-3 align-top">TTT Program for COE on S7 1200</td>
+                          <td className="px-4 py-3 align-top">07</td>
+                          <td className="px-4 py-3 align-top">08/07/2019 to 12/07/2019</td>
+                          <td className="px-4 py-3 align-top">05</td>
+                          <td className="px-4 py-3 align-top">Teachers training program</td>
+                          <td className="px-4 py-3 align-top">Mrs. Mangle, Trainer, SITRAIN, Siemens India Ltd.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">3</td>
+                          <td className="px-4 py-3 align-top">Workshop on Basic Programming for PLC S7 1200</td>
+                          <td className="px-4 py-3 align-top">52</td>
+                          <td className="px-4 py-3 align-top">17/08/2019</td>
+                          <td className="px-4 py-3 align-top">01</td>
+                          <td className="px-4 py-3 align-top">One day workshop arranged for third year students of Instrumentation Engineering.</td>
+                          <td className="px-4 py-3 align-top">Mr. Prafulla Patil and Mr. Vishal Pande, Trainers, Siemens Centre of Excellence.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">4</td>
+                          <td className="px-4 py-3 align-top">Workshop on PLC HMI Communication</td>
+                          <td className="px-4 py-3 align-top">50</td>
+                          <td className="px-4 py-3 align-top">31/08/2019</td>
+                          <td className="px-4 py-3 align-top">01</td>
+                          <td className="px-4 py-3 align-top">One day workshop is arranged for third year students of Instrumentation Engineering.</td>
+                          <td className="px-4 py-3 align-top">Mr. Prafulla Patil and Mr. Vishal Pande, Trainers, Siemens Centre of Excellence.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">5</td>
+                          <td className="px-4 py-3 align-top">Workshop on Basic Programming for PLC S7 1200</td>
+                          <td className="px-4 py-3 align-top">70</td>
+                          <td className="px-4 py-3 align-top">21/09/2019</td>
+                          <td className="px-4 py-3 align-top">01</td>
+                          <td className="px-4 py-3 align-top">One day workshop is arranged for third year students of Mechanical Engineering.</td>
+                          <td className="px-4 py-3 align-top">Mr. Vishal Pande and Mr. Kamlesh Bachkar, Trainers, Siemens Centre of Excellence.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">6</td>
+                          <td className="px-4 py-3 align-top">Workshop on PLC HMI Communication</td>
+                          <td className="px-4 py-3 align-top">75</td>
+                          <td className="px-4 py-3 align-top">28/09/2019</td>
+                          <td className="px-4 py-3 align-top">01</td>
+                          <td className="px-4 py-3 align-top">One day workshop is arranged for third year students of Mechanical Engineering.</td>
+                          <td className="px-4 py-3 align-top">Mr. Prafulla Patil and Mr. Kamlesh Bachkar, Trainers, Siemens Centre of Excellence.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">7</td>
+                          <td className="px-4 py-3 align-top">Basic PLC S7 1200 + HMI</td>
+                          <td className="px-4 py-3 align-top">25</td>
+                          <td className="px-4 py-3 align-top">20/01/2020 to 30/01/2020</td>
+                          <td className="px-4 py-3 align-top">10</td>
+                          <td className="px-4 py-3 align-top">PLC and HMI Programming for students of final year Engineering.</td>
+                          <td className="px-4 py-3 align-top">Mr. Prafulla Patil and Mr. Vishal Pande, Trainers, Siemens Centre of Excellence.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">8</td>
+                          <td className="px-4 py-3 align-top">Workshop on Basics of AC/DC Motors and Drives</td>
+                          <td className="px-4 py-3 align-top">58</td>
+                          <td className="px-4 py-3 align-top">05/10/2019</td>
+                          <td className="px-4 py-3 align-top">01</td>
+                          <td className="px-4 py-3 align-top">One day workshop is arranged for third year students of Instrumentation Engineering.</td>
+                          <td className="px-4 py-3 align-top">Mr. Prafulla Patil and Mr. Vishal Pande, Trainers, Siemens Centre of Excellence.</td>
+                        </tr>
+                        <tr className="odd:bg-white even:bg-slate-50/60">
+                          <td className="px-4 py-3 align-top">9</td>
+                          <td className="px-4 py-3 align-top">One day workshop for third year students of Mechanical Engineering</td>
+                          <td className="px-4 py-3 align-top">73</td>
+                          <td className="px-4 py-3 align-top">12/10/2019</td>
+                          <td className="px-4 py-3 align-top">01</td>
+                          <td className="px-4 py-3 align-top">One day workshop is arranged for third year students of Mechanical Engineering.</td>
+                          <td className="px-4 py-3 align-top">Mr. Vishal Pande and Mr. Kamlesh Bachkar, Trainers, Siemens Centre of Excellence.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <h4 className="text-lg font-semibold text-brand-navy mb-2">Team Coordinators</h4>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Dr. Vikas Gupta</li>
+                    <li>Mr. Prafulla Patil</li>
+                  </ul>
+
+                  <h4 className="text-lg font-semibold text-brand-navy mt-5 mb-2">Members</h4>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Ms. Kanchan Sarmalkar</li>
+                    <li>Mr. Vishal Pande</li>
+                    <li>Ms. Ekta Naik</li>
+                    <li>Mr. Kamlesh Bachkar</li>
+                  </ul>
+                </div>
+              </div>
             </section>
           )}
 
@@ -120,9 +258,15 @@ const CenterOfExcellenceSiemens: React.FC = () => {
                 <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-brand-gold">Siemens CoE</span>
               </div>
               <h3 className="text-2xl font-bold text-brand-navy mb-5 relative inline-block">Benefits<span className="absolute -bottom-2 left-0 w-12 h-1 bg-brand-gold rounded-full" /></h3>
-              <p className="text-slate-600 leading-8">
-                Content will be updated shortly!
-              </p>
+              <div className="text-slate-600 leading-8 space-y-3">
+                <p className="font-semibold">Benefits :</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Exposure to real industrial products.</li>
+                  <li>Hands-on training on Siemens products &amp; certification with Siemens Instruments University Program logo.</li>
+                  <li>Shortened start-up times and faster troubleshooting for actual project development.</li>
+                  <li>Employability for students will increase.</li>
+                </ul>
+              </div>
             </section>
           )}
 
@@ -133,9 +277,18 @@ const CenterOfExcellenceSiemens: React.FC = () => {
                 <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-brand-gold">Siemens CoE</span>
               </div>
               <h3 className="text-2xl font-bold text-brand-navy mb-5 relative inline-block">Activities<span className="absolute -bottom-2 left-0 w-12 h-1 bg-brand-gold rounded-full" /></h3>
-              <p className="text-slate-600 leading-8">
-                Content will be updated shortly!
-              </p>
+              <div className="text-slate-600 leading-8 space-y-3">
+                <p>Click on the academic year below to view the detailed list of activities conducted under Siemens CoE.</p>
+                <a
+                  href="https://vcet.edu.in/wp-content/uploads/2024/04/List-of-Activities.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-4 py-2 rounded-full border border-brand-gold text-brand-navy font-semibold hover:bg-brand-gold hover:text-brand-navy transition-colors duration-200 shadow-sm"
+                >
+                  2023-19
+                  <i className="ph ph-arrow-square-out text-lg ml-2" />
+                </a>
+              </div>
             </section>
           )}
 
@@ -157,9 +310,45 @@ const CenterOfExcellenceSiemens: React.FC = () => {
                 <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-brand-gold">Siemens CoE</span>
               </div>
               <h3 className="text-2xl font-bold text-brand-navy mb-5 relative inline-block">Committee<span className="absolute -bottom-2 left-0 w-12 h-1 bg-brand-gold rounded-full" /></h3>
-              <p className="text-slate-600 leading-8">
-                Content will be updated shortly!
-              </p>
+              <div className="text-slate-600 leading-8 space-y-4">
+                <p className="mb-2">The Siemens Center of Excellence committee comprises the following faculty members:</p>
+                <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                  <table className="min-w-full text-sm text-left">
+                    <thead className="bg-slate-100 text-slate-800">
+                      <tr>
+                        <th className="px-4 py-3 border-b border-slate-200">Faculty</th>
+                        <th className="px-4 py-3 border-b border-slate-200">Department</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      <tr className="odd:bg-white even:bg-slate-50/60">
+                        <td className="px-4 py-3 align-top">Dr. Vikas Gupta</td>
+                        <td className="px-4 py-3 align-top">Electronics and Telecommunication Engineering</td>
+                      </tr>
+                      <tr className="odd:bg-white even:bg-slate-50/60">
+                        <td className="px-4 py-3 align-top">Mr. Prafulla Patil</td>
+                        <td className="px-4 py-3 align-top">Instrumentation Engineering</td>
+                      </tr>
+                      <tr className="odd:bg-white even:bg-slate-50/60">
+                        <td className="px-4 py-3 align-top">Ms. Kanchan Sarmalkar</td>
+                        <td className="px-4 py-3 align-top">Instrumentation Engineering</td>
+                      </tr>
+                      <tr className="odd:bg-white even:bg-slate-50/60">
+                        <td className="px-4 py-3 align-top">Mr. Vishal Pande</td>
+                        <td className="px-4 py-3 align-top">Instrumentation Engineering</td>
+                      </tr>
+                      <tr className="odd:bg-white even:bg-slate-50/60">
+                        <td className="px-4 py-3 align-top">Ms. Ekta Naik</td>
+                        <td className="px-4 py-3 align-top">Electronics and Telecommunication Engineering</td>
+                      </tr>
+                      <tr className="odd:bg-white even:bg-slate-50/60">
+                        <td className="px-4 py-3 align-top">Mr. Kamlesh Bachkar</td>
+                        <td className="px-4 py-3 align-top">Mechanical Engineering</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </section>
           )}
 
