@@ -140,6 +140,9 @@ const CenterOfExcellenceSiemens = lazy(() => import('./pages/CenterOfExcellenceS
 // pages/machinery-diagnostics
 const MachineryDiagnostics = lazy(() => import('./pages/MachineryDiagnostics'));
 
+// pages/texas-instruments-lab
+const TexasInstrumentsLab = lazy(() => import('./pages/TexasInstrumentsLab'));
+
 // pages/footer
 const GermanLanguageClubLayout = lazy(() => import('./pages/footer/german-language-club/GermanLanguageClubLayout'));
 const GermanClubAbout = lazy(() => import('./pages/footer/german-language-club/GermanClubAbout'));
@@ -426,6 +429,7 @@ function App() {
             <Route path="/aicte-idea-vcet" element={<AICTEIdeaVCET />} />
             <Route path="/coe-siemens" element={<CenterOfExcellenceSiemens />} />
             <Route path="/machinery-diagnostics" element={<MachineryDiagnostics />} />
+            <Route path="/texas-instruments-lab" element={<TexasInstrumentsLab />} />
             <Route path="/training" element={<Training />} />
             <Route path="/placement" element={<Placement />} />
             <Route path="/e-cell" element={<ECell />} />
