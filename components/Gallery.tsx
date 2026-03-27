@@ -99,7 +99,9 @@ const Gallery: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px] sm:auto-rows-[260px]">
           {displayGalleries.map((item, idx) => {
             const isFeatured = idx === 0;
-            const linkTo = item.title === 'AICTE IDEA Lab' ? '/aicte-idea-vcet' : null;
+            let linkTo = null;
+            if (item.title === 'AICTE IDEA Lab') linkTo = '/aicte-idea-vcet';
+            if (item.title === 'Center of Excellence') linkTo = '/coe-siemens';
             
             return (
               <div

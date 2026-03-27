@@ -94,9 +94,21 @@ const CenterOfExcellenceSiemens: React.FC = () => {
                 <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-brand-gold">Siemens CoE</span>
               </div>
               <h3 className="text-2xl font-bold text-brand-navy mb-5 relative inline-block">About<span className="absolute -bottom-2 left-0 w-12 h-1 bg-brand-gold rounded-full" /></h3>
-              <p className="text-slate-600 leading-8">
-                The Center of Excellence - SIEMENS provides state-of-the-art facilities for research and training in industrial automation and digitalization. Content will be updated shortly!
-              </p>
+              <div className="space-y-6 text-slate-600 leading-8">
+                <p>
+                  The Center of Excellence - SIEMENS provides state-of-the-art facilities for research and training in industrial automation and digitalization.
+                </p>
+                <div className="bg-brand-navylight/30 p-6 rounded-2xl border border-brand-navylight">
+                  <h4 className="text-xl font-bold text-brand-navy mb-2">PLC Automation and Drives :</h4>
+                  <p>At VCET, we understand the importance of elevating student’s skills in adapting to newer challenges and value the returns of investing in technical skill enhancement. Since last year, Siemens Centre of excellence at VCET is established to provide training for our students in the field of Automation & Drives. The training module encompasses a wide range of courses designed for PLCs, Drives, Controls, HMI, Networks, Process Control, and more. Which subsequently translates into effective, flexible, and value based training and real results in productivity, cost reductions and process optimization. Through specific courses designed for students, each course schedule consists of well balanced theory and provides hands-on training to optimize the knowledge about the products. Our fleet of experienced trainers ensures that each participant makes a contribution towards productivity and performance improvement in this organization.
+This centre assist students to come up with their own new project ideas and implement them. Center is equipped with various kits of Siemens. kits are available under three sections which are as follows:
+
+SIMATIC S7 1200 PLC kit with HMI (A set of 6 kits package)
+SINAMICS G120 Trainer (set of 5 kits
+SINAMICS DCM 6RA80 Trainer with DC Motors (A set of 2 kits)
+Students can have hands on practice on these kits and learn about it.</p>
+                </div>
+              </div>
             </section>
           )}
 
