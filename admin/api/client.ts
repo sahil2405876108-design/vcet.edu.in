@@ -165,5 +165,5 @@ export function resolveApiUrl(path: string | null | undefined): string | null {
   if (/^\/?(images|Images|pdfs|Pdfs)\//.test(path)) {
     return path.startsWith("/") ? path : `/${path}`;
   }
-
-export const client = { request, requestForm };
+  return `${API_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
+}
