@@ -9,6 +9,7 @@ import CommitteesForm from '../committees/CommitteesForm';
 import ResearchForm from '../research/ResearchForm';
 import FacilitiesForm from '../facilities/FacilitiesForm';
 import AboutUsForm from '../about/AboutUsForm';
+import NaacForm from '../naac/NaacForm';
 
 const homeEditables = [
   {
@@ -145,6 +146,15 @@ const facilitiesEditables = [
   { slug: 'sports-gymkhana', title: 'Sports & Gymkhana', description: 'Sports facilities, event records, and operational rules.' }
 ];
 
+const naacEditables = [
+  { slug: 'sss', title: 'Student Satisfaction Survey (SSS)', description: 'Survey overview, link, participation details, and handling.' },
+  { slug: 'sss-report', title: 'SSS Report', description: 'Year-wise SSS reports and overarching document collection.' },
+  { slug: 'ssr-cycle-1', title: 'SSR Cycle 1', description: 'Basic details, QIF, Extended Profile, DVV standard verifications.' },
+  { slug: 'ssr-cycle-2', title: 'SSR Cycle 2', description: 'Basic details, QIF, Extended Profile, DVV standard verifications.' },
+  { slug: 'best-practices', title: 'Best Practices & Distinctiveness', description: 'Manage institutional unique best practices.' },
+  { slug: 'naac-score', title: 'NAAC Accreditation Score', description: 'Score summary, validity, and official certification details.' },
+];
+
 const aboutEditables = [
   { slug: 'overview', title: 'Institute Overview', description: 'Institutional history, accreditation, and quick facts.' },
   { slug: 'president-desk', title: 'President\'s Desk', description: 'Leadership message and profile of the President.' },
@@ -204,6 +214,10 @@ const SitePages: React.FC = () => {
 
   if (activeTab.key === 'facilities' && activeSection) {
     return <FacilitiesForm slug={activeSection} onBack={() => setActiveSection(null)} />;
+  }
+
+  if (activeTab.key === 'naac' && activeSection) {
+    return <NaacForm slug={activeSection} onBack={() => setActiveSection(null)} />;
   }
 
   if (activeTab.key === 'about-us' && activeSection) {
@@ -364,6 +378,33 @@ const SitePages: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {facilitiesEditables.map((item) => (
+            <div key={item.slug} className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">{item.title}</h2>
+              <p className="text-sm text-slate-500 mt-2">{item.description}</p>
+              <div className="flex flex-wrap gap-2 mt-4">
+                <button
+                  onClick={() => setActiveSection(item.slug)}
+                  className="inline-flex items-center px-3.5 py-2 rounded-xl bg-[#2563EB] text-white text-xs font-semibold hover:bg-blue-700 transition-colors"
+                >
+                  Edit Section
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (activeTab.key === 'naac') {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">NAAC Editor</h1>
+          <p className="text-sm text-slate-500 mt-1">Manage institutional NAAC reports, cycles, and scores.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {naacEditables.map((item) => (
             <div key={item.slug} className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm">
               <h2 className="text-lg font-semibold text-slate-900">{item.title}</h2>
               <p className="text-sm text-slate-500 mt-2">{item.description}</p>
