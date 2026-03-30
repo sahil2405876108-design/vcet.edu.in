@@ -3,7 +3,7 @@ import { MMSFaqData, MMSFaqPayload, ItemResponse } from '../types';
 
 export const mmsFaqsApi = {
   // Fetch the data
-  get: () => client.request<ItemResponse<MMSFaqData>>('/mms-faqs'),
+  get: () => client.request<ItemResponse<MMSFaqData>>('/pages/mms-faqs'),
 
   // Update logic (recursive FormData for nested structures)
   update: (payload: MMSFaqPayload) => {
@@ -33,6 +33,6 @@ export const mmsFaqsApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<MMSFaqData>>('/mms-faqs', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSFaqData>>('/pages/mms-faqs', formData, 'POST');
   },
 };

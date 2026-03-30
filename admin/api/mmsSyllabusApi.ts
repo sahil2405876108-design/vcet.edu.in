@@ -3,7 +3,7 @@ import { MMSSyllabusData, MMSSyllabusPayload, ItemResponse } from '../types';
 
 export const mmsSyllabusApi = {
   // Fetch the data
-  get: () => client.request<ItemResponse<MMSSyllabusData>>('/mms-syllabus'),
+  get: () => client.request<ItemResponse<MMSSyllabusData>>('/pages/mms-syllabus'),
 
   // Update the data using FormData for PDF uploads
   update: (payload: MMSSyllabusPayload) => {
@@ -29,6 +29,6 @@ export const mmsSyllabusApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<MMSSyllabusData>>('/mms-syllabus', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSSyllabusData>>('/pages/mms-syllabus', formData, 'POST');
   },
 };

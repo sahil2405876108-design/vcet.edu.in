@@ -3,7 +3,7 @@ import { MMSAdmissionData, MMSAdmissionPayload, ItemResponse } from '../types';
 
 export const mmsAdmissionApi = {
   // Fetch the data
-  get: () => client.request<ItemResponse<MMSAdmissionData>>('/mms-admission'),
+  get: () => client.request<ItemResponse<MMSAdmissionData>>('/pages/mms-admission'),
 
   // Update the data using FormData recursively or by passing it via standard JSON if possible.
   update: (payload: MMSAdmissionPayload) => {
@@ -34,6 +34,6 @@ export const mmsAdmissionApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<MMSAdmissionData>>('/mms-admission', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSAdmissionData>>('/pages/mms-admission', formData, 'POST');
   },
 };

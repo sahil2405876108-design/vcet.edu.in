@@ -2,7 +2,7 @@ import { client } from './client';
 import { MMSFeesData, MMSFeesPayload, ItemResponse } from '../types';
 
 export const mmsFeesApi = {
-  get: () => client.request<ItemResponse<MMSFeesData>>('/mms-fees'),
+  get: () => client.request<ItemResponse<MMSFeesData>>('/pages/mms-fees'),
   update: (payload: MMSFeesPayload) => {
     const formData = new FormData();
     const appendFormData = (data: any, rootName: string) => {
@@ -28,6 +28,6 @@ export const mmsFeesApi = {
         appendFormData((payload as any)[key], key);
       }
     }
-    return client.requestForm<ItemResponse<MMSFeesData>>('/mms-fees', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSFeesData>>('/pages/mms-fees', formData, 'POST');
   }
 };

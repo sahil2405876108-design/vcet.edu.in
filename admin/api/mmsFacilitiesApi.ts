@@ -3,7 +3,7 @@ import { MMSFacilitiesData, MMSFacilitiesPayload, ItemResponse } from '../types'
 
 export const mmsFacilitiesApi = {
   // Fetch the data
-  get: () => client.request<ItemResponse<MMSFacilitiesData>>('/mms-facilities'),
+  get: () => client.request<ItemResponse<MMSFacilitiesData>>('/pages/mms-facilities'),
 
   // Update using FormData for nested structure and image uploads
   update: (payload: MMSFacilitiesPayload) => {
@@ -33,6 +33,6 @@ export const mmsFacilitiesApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<MMSFacilitiesData>>('/mms-facilities', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSFacilitiesData>>('/pages/mms-facilities', formData, 'POST');
   },
 };

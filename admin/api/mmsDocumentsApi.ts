@@ -2,7 +2,7 @@ import { client } from './client';
 import { MMSDocumentsData, MMSDocumentsPayload, ItemResponse } from '../types';
 
 export const mmsDocumentsApi = {
-  get: () => client.request<ItemResponse<MMSDocumentsData>>('/mms-documents'),
+  get: () => client.request<ItemResponse<MMSDocumentsData>>('/pages/mms-documents'),
   update: (payload: MMSDocumentsPayload) => {
     const formData = new FormData();
     const appendFormData = (data: any, rootName: string) => {
@@ -28,6 +28,6 @@ export const mmsDocumentsApi = {
         appendFormData((payload as any)[key], key);
       }
     }
-    return client.requestForm<ItemResponse<MMSDocumentsData>>('/mms-documents', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSDocumentsData>>('/pages/mms-documents', formData, 'POST');
   }
 };
