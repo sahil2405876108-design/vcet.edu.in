@@ -3,6 +3,7 @@ import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { FileText, Download, Calendar } from 'lucide-react';
 import { getAboutSection } from '../../services/about';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 interface PlanDocument {
   label?: string;
@@ -63,34 +64,37 @@ const StrategicPlan: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {plans.map((plan, idx) => (
-                <a
-                  key={`${plan.year ?? plan.session}-${idx}`}
-                  href={plan.fileUrl ?? plan.file_url ?? plan.url ?? '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`reveal group ${(plan.fileUrl ?? plan.file_url ?? plan.url) ? '' : 'pointer-events-none opacity-70'}`}
-                  style={{ transitionDelay: `${idx * 0.08}s` }}
-                >
-                  <div className="flex items-center gap-4 p-5 bg-brand-light rounded-2xl border border-gray-100 hover:border-brand-gold/40 hover:shadow-lg transition-all duration-500 h-full">
-                    <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-brand-blue to-brand-navy flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <FileText className="w-6 h-6 text-white" />
-                    </div>
+              {plans.map((plan, idx) => {
+                const fileHref = resolveUploadedAssetUrl(plan.fileUrl ?? plan.file_url ?? plan.url ?? null);
+                return (
+                  <a
+                    key={`${plan.year ?? plan.session}-${idx}`}
+                    href={fileHref ?? '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`reveal group ${fileHref ? '' : 'pointer-events-none opacity-70'}`}
+                    style={{ transitionDelay: `${idx * 0.08}s` }}
+                  >
+                    <div className="flex items-center gap-4 p-5 bg-brand-light rounded-2xl border border-gray-100 hover:border-brand-gold/40 hover:shadow-lg transition-all duration-500 h-full">
+                      <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-brand-blue to-brand-navy flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <FileText className="w-6 h-6 text-white" />
+                      </div>
 
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-display font-bold text-brand-navy group-hover:text-brand-blue transition-colors duration-300">{plan.label ?? plan.title ?? ''}</h3>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <Calendar className="w-3.5 h-3.5 text-brand-gold" />
-                        <span className="text-xs text-slate-400">{plan.year ?? plan.session ?? ''}</span>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-display font-bold text-brand-navy group-hover:text-brand-blue transition-colors duration-300">{plan.label ?? plan.title ?? ''}</h3>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <Calendar className="w-3.5 h-3.5 text-brand-gold" />
+                          <span className="text-xs text-slate-400">{plan.year ?? plan.session ?? ''}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center group-hover:bg-brand-gold group-hover:border-brand-gold transition-all duration-300">
+                        <Download className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors duration-300" />
                       </div>
                     </div>
-
-                    <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center group-hover:bg-brand-gold group-hover:border-brand-gold transition-all duration-300">
-                      <Download className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors duration-300" />
-                    </div>
-                  </div>
-                </a>
-              ))}
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>

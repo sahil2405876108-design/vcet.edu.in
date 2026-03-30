@@ -3,6 +3,7 @@ import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { Mail } from 'lucide-react';
 import { getAboutSection } from '../../services/about';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 interface AdminMember {
   name?: string;
@@ -60,10 +61,19 @@ const Administration: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-3xl mx-auto">
-              {members.map((member, idx) => (
+              {members.map((member, idx) => {
+                const memberImage = resolveUploadedAssetUrl(member.image ?? null);
+                return (
                 <div key={`${member.name}-${idx}`} className="reveal" style={{ transitionDelay: `${idx * 0.15}s` }}>
                   <div className="bg-brand-light rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-gold/30 transition-all duration-500 group">
                     <div className="aspect-[3/4] bg-gradient-to-br from-brand-blue/10 to-brand-gold/10 flex items-center justify-center relative overflow-hidden">
+                      {memberImage && (
+                        <img
+                          src={memberImage}
+                          alt={`${member.name ?? 'Admin'} profile`}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/50 to-transparent z-10" />
                     </div>
 
@@ -82,7 +92,8 @@ const Administration: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { Quote, GraduationCap, Briefcase, Users, Star } from 'lucide-react';
 import { getAboutSection } from '../../services/about';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 interface PrincipalData {
   intro?: {
@@ -37,6 +38,7 @@ const PrincipalsDesk: React.FC = () => {
   const role = intro.role || 'Principal';
   const highlightQuote = intro.highlightQuote || "Our cherished motto is the 'overall empowerment of students' for their all-round development.";
   const closingQuote = intro.closingQuote || 'I appeal to all of you one more time — give your best and make VCET one of the finest learning centres among its peers.';
+  const profileImage = resolveUploadedAssetUrl(intro.image ?? null) || '/images/About Us/Principal_sDesk/Dr.Rakesh-Himte.jpg';
 
   const messageParagraphs = useMemo(() => {
     if (Array.isArray(data?.messageParagraphs) && data.messageParagraphs.length) {
@@ -75,7 +77,7 @@ const PrincipalsDesk: React.FC = () => {
                 <div className="rounded-3xl p-[2.5px] bg-gradient-to-br from-yellow-300 via-brand-gold to-yellow-500 shadow-[0_0_40px_6px_rgba(253,184,19,0.4)]">
                   <div className="bg-white rounded-[22px] overflow-hidden">
                     <div className="relative w-full overflow-hidden bg-brand-light" style={{ height: '280px' }}>
-                      <img src="/images/About Us/Principal_sDesk/Dr.Rakesh-Himte.jpg" alt={`${name} – ${role}`} className="w-full h-full object-cover object-top" />
+                      <img src={profileImage} alt={`${name} – ${role}`} className="w-full h-full object-cover object-top" />
                     </div>
                     <div className="px-5 py-4 bg-gradient-to-b from-white to-amber-50/40">
                       <div className="text-center mb-3">

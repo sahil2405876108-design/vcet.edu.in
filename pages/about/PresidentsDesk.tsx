@@ -3,6 +3,7 @@ import { Quote } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { getAboutSection } from '../../services/about';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 interface PresidentData {
   intro?: {
@@ -44,6 +45,7 @@ const PresidentsDesk: React.FC = () => {
   const role = intro.role || 'President, Vidyavardhini Education Society';
   const highlightQuote = intro.highlightQuote || 'The main aim of the college is to help students grow in all aspects of life.';
   const closingQuote = intro.closingQuote || "Vidyavardhini's College of Engineering and Technology is an excellent choice for your career and growth. We remain committed to shaping the engineers and leaders of tomorrow.";
+  const profileImage = resolveUploadedAssetUrl(intro.image ?? null) || '/images/About Us/President_s Desk/Mr._Vikas_Vartak.jpg';
 
   return (
     <PageLayout>
@@ -63,7 +65,7 @@ const PresidentsDesk: React.FC = () => {
                   <div className="rounded-3xl p-[2.5px] bg-gradient-to-br from-yellow-300 via-brand-gold to-yellow-500 shadow-[0_0_40px_6px_rgba(253,184,19,0.4)]">
                     <div className="bg-white rounded-[22px] overflow-hidden">
                       <div className="relative w-full overflow-hidden bg-brand-light" style={{ height: '280px' }}>
-                        <img src="/images/About Us/President_s Desk/Mr._Vikas_Vartak.jpg" alt={`${name} – ${role}`} className="w-full h-full object-cover object-top" />
+                        <img src={profileImage} alt={`${name} – ${role}`} className="w-full h-full object-cover object-top" />
                       </div>
                       <div className="px-5 py-4 bg-gradient-to-b from-white to-amber-50/40">
                         <div className="text-center mb-3">

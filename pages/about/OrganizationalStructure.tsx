@@ -3,6 +3,7 @@ import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { Building2 } from 'lucide-react';
 import { getAboutSection } from '../../services/about';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 interface FlatOrgNode {
   name?: string;
@@ -26,6 +27,7 @@ interface HierarchyNode {
 
 interface OrgData {
   orgIntro?: string;
+  orgChartImage?: string | null;
   orgNodes?: FlatOrgNode[];
 }
 
@@ -105,6 +107,7 @@ const OrganizationalStructure: React.FC = () => {
 
   const hierarchies = useMemo(() => buildHierarchy(data?.orgNodes ?? []), [data]);
   const intro = data?.orgIntro || "The organizational framework of Vidyavardhini's College of Engineering and Technology";
+  const orgChartImage = resolveUploadedAssetUrl(data?.orgChartImage ?? null);
 
   return (
     <PageLayout>
@@ -122,6 +125,12 @@ const OrganizationalStructure: React.FC = () => {
               <h2 className="text-2xl md:text-3xl font-display font-bold text-brand-navy">Institutional Hierarchy</h2>
               <p className="text-slate-500 mt-3 max-w-xl mx-auto">{intro}</p>
             </div>
+
+            {orgChartImage && (
+              <div className="reveal mb-10 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                <img src={orgChartImage} alt="Organizational Chart" className="w-full h-auto object-contain" />
+              </div>
+            )}
 
             <div className="flex flex-wrap justify-center gap-10 overflow-x-auto pb-8">
               {hierarchies.map((root, index) => (
