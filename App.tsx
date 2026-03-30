@@ -257,6 +257,20 @@ const FacultyForm = lazy(() => import('./admin/pages/faculty/FacultyForm'));
 const DepartmentLanding = lazy(() => import('./admin/pages/departments/DepartmentLanding'));
 const DepartmentList = lazy(() => import('./admin/pages/departments/DepartmentList'));
 const DepartmentForm = lazy(() => import('./admin/pages/departments/DepartmentForm'));
+const MMSAdmissionForm = lazy(() => import('./admin/pages/mms/MMSAdmissionForm'));
+const MMSScholarshipForm = lazy(() => import('./admin/pages/mms/MMSScholarshipForm'));
+const MMSDocumentsForm = lazy(() => import('./admin/pages/mms/MMSDocumentsForm'));
+const MMSFeesForm = lazy(() => import('./admin/pages/mms/MMSFeesForm'));
+const MMSTrainingForm = lazy(() => import('./admin/pages/mms/MMSTrainingForm'));
+const MMSPlacementInfoForm = lazy(() => import('./admin/pages/mms/MMSPlacementInfoForm'));
+const MMSOjtInternshipForm = lazy(() => import('./admin/pages/mms/MMSOjtInternshipForm'));
+const MMSStudentPlacementsForm = lazy(() => import('./admin/pages/mms/MMSStudentPlacementsForm'));
+const MMSExperientialLearningForm = lazy(() => import('./admin/pages/mms/MMSExperientialLearningForm'));
+const MMSAboutForm = lazy(() => import('./admin/pages/mms/MMSAboutForm'));
+const MMSStudentsLifeForm = lazy(() => import('./admin/pages/mms/MMSStudentsLifeForm'));
+const MMSSyllabusForm = lazy(() => import('./admin/pages/mms/MMSSyllabusForm'));
+const MMSFacilitiesForm = lazy(() => import('./admin/pages/mms/MMSFacilitiesForm'));
+const MMSFaqsForm = lazy(() => import('./admin/pages/mms/MMSFaqsForm'));
 
 /* ── Loading Spinner ── */
 const PageLoader = () => (
@@ -580,6 +594,22 @@ function App() {
             <Route path="pages/faculty" element={<FacultyList />} />
             <Route path="pages/faculty/create" element={<FacultyForm />} />
             <Route path="pages/faculty/:id/edit" element={<FacultyForm />} />
+            {/* ── MMS ── */}
+            <Route path="pages/mms/training-placement/edit" element={<MMSTrainingForm />} />
+            <Route path="pages/mms/training/edit" element={<MMSTrainingForm />} />
+            <Route path="pages/mms/placement-info/edit" element={<MMSPlacementInfoForm />} />
+            <Route path="pages/mms/ojt-internships/edit" element={<MMSOjtInternshipForm />} />
+            <Route path="pages/mms/student-placements/edit" element={<MMSStudentPlacementsForm />} />
+            <Route path="pages/mms/admission/edit" element={<MMSAdmissionForm />} />
+            <Route path="pages/mms/scholarship/edit" element={<MMSScholarshipForm />} />
+            <Route path="pages/mms/documents/edit" element={<MMSDocumentsForm />} />
+            <Route path="pages/mms/fees/edit" element={<MMSFeesForm />} />
+            <Route path="pages/mms/experiential-learning/:section/edit" element={<MMSExperientialLearningForm />} />
+            <Route path="pages/mms/about/:section/edit" element={<MMSAboutForm />} />
+            <Route path="pages/mms/students-life/:section/edit" element={<MMSStudentsLifeForm />} />
+            <Route path="pages/mms/syllabus/:section/edit" element={<MMSSyllabusForm />} />
+            <Route path="pages/mms/facilities/:section/edit" element={<MMSFacilitiesForm />} />
+            <Route path="pages/mms/faqs/:section/edit" element={<MMSFaqsForm />} />
             <Route path="pages/:pageKey" element={<SitePages />} />
           </Route>
         </Routes>
