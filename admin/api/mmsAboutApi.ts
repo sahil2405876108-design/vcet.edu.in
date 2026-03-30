@@ -2,7 +2,7 @@ import { client } from './client';
 import { MMSAboutData, MMSAboutPayload, ItemResponse } from '../types';
 
 export const mmsAboutApi = {
-  get: () => client.request<ItemResponse<MMSAboutData>>('/mms-about'),
+  get: () => client.request<ItemResponse<MMSAboutData>>('/pages/mms-about'),
 
   update: (payload: MMSAboutPayload) => {
     const formData = new FormData();
@@ -30,6 +30,6 @@ export const mmsAboutApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<MMSAboutData>>('/mms-about', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSAboutData>>('/pages/mms-about', formData, 'POST');
   },
 };

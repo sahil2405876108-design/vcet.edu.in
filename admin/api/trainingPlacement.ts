@@ -3,7 +3,7 @@ import { TrainingPlacementData, TrainingPlacementPayload, ItemResponse } from '.
 
 export const trainingPlacementApi = {
   // Fetch the data
-  get: () => client.request<ItemResponse<TrainingPlacementData>>('/training-placement'),
+  get: () => client.request<ItemResponse<TrainingPlacementData>>('/pages/mms-training-placement'),
 
   // Update the data using FormData recursively or by passing it via standard JSON if possible.
   // We'll mimic the structure but actually pass it as JSON. If the backend later expects actual multipart
@@ -40,6 +40,6 @@ export const trainingPlacementApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<TrainingPlacementData>>('/training-placement', formData, 'POST');
+    return client.requestForm<ItemResponse<TrainingPlacementData>>('/pages/mms-training-placement', formData, 'POST');
   },
 };

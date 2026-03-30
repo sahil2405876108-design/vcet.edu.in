@@ -3,7 +3,7 @@ import { MMSStudentsLifeData, MMSStudentsLifePayload, ItemResponse } from '../ty
 
 export const mmsStudentsLifeApi = {
   // Fetch the data
-  get: () => client.request<ItemResponse<MMSStudentsLifeData>>('/mms-students-life'),
+  get: () => client.request<ItemResponse<MMSStudentsLifeData>>('/pages/mms-students-life'),
 
   // Update the data using FormData recursively to support nested file uploads (images/rankers)
   update: (payload: MMSStudentsLifePayload) => {
@@ -33,6 +33,6 @@ export const mmsStudentsLifeApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<MMSStudentsLifeData>>('/mms-students-life', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSStudentsLifeData>>('/pages/mms-students-life', formData, 'POST');
   },
 };

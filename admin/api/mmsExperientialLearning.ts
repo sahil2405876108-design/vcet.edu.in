@@ -3,7 +3,7 @@ import { MMSExperientialLearningData, MMSExperientialLearningPayload, ItemRespon
 
 export const mmsExperientialLearningApi = {
   // Fetch the data
-  get: () => client.request<ItemResponse<MMSExperientialLearningData>>('/mms-experiential-learning'),
+  get: () => client.request<ItemResponse<MMSExperientialLearningData>>('/pages/mms-experiential-learning'),
 
   // Update the data using FormData recursively or by passing it via standard JSON if possible.
   update: (payload: MMSExperientialLearningPayload) => {
@@ -34,6 +34,6 @@ export const mmsExperientialLearningApi = {
       appendFormData((payload as any)[key], key);
     });
 
-    return client.requestForm<ItemResponse<MMSExperientialLearningData>>('/mms-experiential-learning', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSExperientialLearningData>>('/pages/mms-experiential-learning', formData, 'POST');
   },
 };

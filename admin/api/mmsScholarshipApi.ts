@@ -2,7 +2,7 @@ import { client } from './client';
 import { MMSScholarshipData, MMSScholarshipPayload, ItemResponse } from '../types';
 
 export const mmsScholarshipApi = {
-  get: () => client.request<ItemResponse<MMSScholarshipData>>('/mms-scholarship'),
+  get: () => client.request<ItemResponse<MMSScholarshipData>>('/pages/mms-scholarship'),
   update: (payload: MMSScholarshipPayload) => {
     const formData = new FormData();
     const appendFormData = (data: any, rootName: string) => {
@@ -28,6 +28,6 @@ export const mmsScholarshipApi = {
         appendFormData((payload as any)[key], key);
       }
     }
-    return client.requestForm<ItemResponse<MMSScholarshipData>>('/mms-scholarship', formData, 'POST');
+    return client.requestForm<ItemResponse<MMSScholarshipData>>('/pages/mms-scholarship', formData, 'POST');
   }
 };
