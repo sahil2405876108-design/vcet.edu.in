@@ -906,7 +906,7 @@ export interface MMSAboutData {
   aboutMMS: { description: string; image: string | File | null; };
   principalDesk: { message: string; photo: string | File | null; };
   hodDesk: { message: string; photo: string | File | null; };
-  faculty: { name: string; designation: string; photo: string | File | null; }[];
+  faculty: { name: string; designation: string; email: string; photo: string | File | null; }[];
   dabMembers: { srNo: number; name: string; designation: string; organization: string; role: string; }[];
   updatedAt?: string;
 }
