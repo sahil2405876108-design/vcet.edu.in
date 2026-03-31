@@ -259,6 +259,7 @@ const FacultyForm = lazy(() => import('./admin/pages/faculty/FacultyForm'));
 const DepartmentLanding = lazy(() => import('./admin/pages/departments/DepartmentLanding'));
 const DepartmentList = lazy(() => import('./admin/pages/departments/DepartmentList'));
 const DepartmentForm = lazy(() => import('./admin/pages/departments/DepartmentForm'));
+const DepartmentNewsletter = lazy(() => import('./admin/pages/departments/newsletter/DepartmentNewsletter'));
 const MMSAdmissionForm = lazy(() => import('./admin/pages/mms/MMSAdmissionForm'));
 const MMSScholarshipForm = lazy(() => import('./admin/pages/mms/MMSScholarshipForm'));
 const MMSDocumentsForm = lazy(() => import('./admin/pages/mms/MMSDocumentsForm'));
@@ -596,6 +597,7 @@ function App() {
             <Route path="pages/departments/list" element={<DepartmentList />} />
             <Route path="pages/departments/list/create" element={<DepartmentForm />} />
             <Route path="pages/departments/list/:slug/edit" element={<DepartmentForm />} />
+            <Route path="pages/departments/newsletter" element={<DepartmentNewsletter />} />
             <Route path="pages/faculty" element={<FacultyList />} />
             <Route path="pages/faculty/create" element={<FacultyForm />} />
             <Route path="pages/faculty/:id/edit" element={<FacultyForm />} />
