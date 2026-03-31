@@ -131,7 +131,14 @@ const MMSPlacementInfoForm: React.FC = () => {
                   const c = [...form.placementCellMembers!]; c.splice(i, 1); setForm({ ...form, placementCellMembers: c });
                 }} className="absolute top-2 right-2 text-red-500 z-10 p-1 bg-white rounded-md shadow-sm border border-red-100"><Trash2 className="w-3.5 h-3.5" /></button>
 
-                <ImageUploader onFileSelect={() => { }} />
+                <ImageUploader 
+                  value={mem.image} 
+                  onFileSelect={f => {
+                    const c = [...form.placementCellMembers!]; 
+                    c[i] = { ...c[i], image: f }; 
+                    setForm({ ...form, placementCellMembers: c });
+                  }} 
+                />
 
                 <div className="relative">
                   <label className="admin-label">Name <span className="text-slate-400 normal-case">({mem.name.length}/30)</span></label>

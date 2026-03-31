@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageIcon } from 'lucide-react';
 import MMSLayout from '../../../components/mms/MMSLayout';
 import { PlacementDataTableCard } from './MMSPlacementShared';
+import { get, resolveApiUrl } from '../../../services/api';
+import type { TrainingPlacementData } from '../../../admin/types';
 
-const placementsRows = [
+const defaultPlacementsRows = [
   {
     srNo: 1,
     student: 'Vidya Totre',
@@ -49,6 +51,43 @@ const placementsRows = [
 ];
 
 export default function MMSPlacementStudentsPlacements() {
+  const [data, setData] = useState<TrainingPlacementData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await get<{ data: TrainingPlacementData }>('/pages/mms-training-placement');
+        setData(response.data);
+      } catch (err) {
+        console.error('Failed to fetch training placement data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <MMSLayout title="Student Placements">
+        <PlacementDataTableCard title="Student Placements">
+           <div className="py-20 text-center text-slate-500 animate-pulse">Loading Placement Records...</div>
+        </PlacementDataTableCard>
+      </MMSLayout>
+    );
+  }
+
+  const placementsRows = data?.studentPlacements && data.studentPlacements.length > 0
+    ? data.studentPlacements.map((row, idx) => ({
+        srNo: idx + 1,
+        student: row.studentName,
+        specialization: row.specialization,
+        company: row.company,
+        src: resolveApiUrl(row.image) || undefined,
+      }))
+    : defaultPlacementsRows;
+
   return (
     <MMSLayout title="Student Placements">
       <PlacementDataTableCard title="Student Placements">

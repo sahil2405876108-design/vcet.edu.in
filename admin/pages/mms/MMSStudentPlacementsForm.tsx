@@ -103,7 +103,14 @@ const MMSStudentPlacementsForm: React.FC = () => {
                   const c = [...form.studentPlacements!]; c.splice(i, 1); setForm({ ...form, studentPlacements: c });
                 }} className="absolute top-2 right-2 text-red-500 z-10 p-1 bg-white rounded-md shadow-sm border border-red-100"><Trash2 className="w-3.5 h-3.5" /></button>
 
-                <ImageUploader onFileSelect={() => { }} />
+                  <ImageUploader 
+                    value={student.image}
+                    onFileSelect={(f) => { 
+                      const c = [...form.studentPlacements!];
+                      c[i] = { ...c[i], image: f };
+                      setForm({ ...form, studentPlacements: c });
+                    }} 
+                  />
 
                 <div className="relative">
                   <label className="admin-label">Sr. No</label>
@@ -152,10 +159,13 @@ const MMSStudentPlacementsForm: React.FC = () => {
             </div>
             <div>
               <label className="admin-label mb-2">Recruiters Banner Image</label>
-              <ImageUploader onFileSelect={() => { }} />
+                <ImageUploader
+                  value={form.recruitersBanner?.image}
+                  onFileSelect={(f) => setForm({ ...form, recruitersBanner: { ...form.recruitersBanner, image: f } })}
+                />
+              </div>
             </div>
-          </div>
-        </SectionCard>
+          </SectionCard>
 
         {/* SECTION 3: Placement Gallery */}
         <SectionCard title="Placement Gallery" icon="📸">

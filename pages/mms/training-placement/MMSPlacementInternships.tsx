@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MMSLayout from '../../../components/mms/MMSLayout';
 import { PlacementDataTableCard } from './MMSPlacementShared';
+import { get } from '../../../services/api';
+import type { TrainingPlacementData } from '../../../admin/types';
 
 type InternshipRow = {
   srNo: number;
@@ -9,7 +11,7 @@ type InternshipRow = {
   company: string;
 };
 
-const internshipRows: InternshipRow[] = [
+const defaultInternshipRows: InternshipRow[] = [
   { srNo: 1, studentName: 'AKSARI ASANIN KITMA SAHEB', specialization: 'Finance', company: 'ASHIVERA ACADEMY' },
   { srNo: 2, studentName: 'BHABOWAI NCHA AJAY', specialization: 'Finance', company: 'SAMCO SECURITIES LIMITED' },
   { srNo: 3, studentName: 'BORKAR MOSHKADA DEEPAK', specialization: 'Finance', company: 'FIDUCIARY CAPITAL' },
@@ -58,6 +60,42 @@ const internshipRows: InternshipRow[] = [
 ];
 
 export default function MMSPlacementInternships() {
+  const [data, setData] = useState<TrainingPlacementData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await get<{ data: TrainingPlacementData }>('/pages/mms-training-placement');
+        setData(response.data);
+      } catch (err) {
+        console.error('Failed to fetch training placement data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+     <MMSLayout title="List of Students placed For OJT and Summer Internship">   
+      <PlacementDataTableCard title="List of Students placed For OJT and Summer Internship">
+         <div className="py-20 text-center text-slate-500 animate-pulse">Loading Internship Records...</div>
+      </PlacementDataTableCard>
+     </MMSLayout>
+    );
+  }
+
+  const internshipRows = data?.internshipList && data.internshipList.length > 0
+    ? data.internshipList.map((row, idx) => ({
+        srNo: idx + 1,
+        studentName: row.studentName,
+        specialization: row.specialization,
+        company: row.company,
+      }))
+    : defaultInternshipRows;
+
   return (
     <MMSLayout title="List of Students placed For OJT and Summer Internship">
       <PlacementDataTableCard title="List of Students placed For OJT and Summer Internship">

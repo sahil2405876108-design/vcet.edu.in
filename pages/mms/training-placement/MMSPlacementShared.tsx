@@ -28,10 +28,11 @@ interface PlacementImageHolderProps {
   imageSrc?: string;
 }
 
-export function PlacementImageHolder({ label, size = 'default', imageSrc }: PlacementImageHolderProps) {
+export function PlacementImageHolder({ label, size = 'default', imageSrc, src }: PlacementImageHolderProps) {
   const minHeightClass = size === 'large' ? 'min-h-[300px]' : 'min-h-[220px]';  
-  const hookImageUrl = useMmsImageHolder('placement', label, !!imageSrc);
-  const imageUrl = imageSrc || hookImageUrl;
+  const activeSrc = imageSrc || src;
+  const hookImageUrl = useMmsImageHolder('placement', label, !!activeSrc);       
+  const imageUrl = activeSrc || hookImageUrl;
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
