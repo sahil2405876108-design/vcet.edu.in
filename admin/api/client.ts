@@ -183,7 +183,7 @@ async function requestForm<T>(
 }
 
 export function resolveApiUrl(path: string | null | undefined): string | null {
-  if (!path) return null;
+  if (!path || typeof path !== "string") return null;
   if (/^https?:\/\//i.test(path) || path.startsWith("blob:") || path.startsWith("data:")) return path;      
   // Local frontend assets shouldn't be prefixed with API_ORIGIN
   if (/^\/?(images|Images|pdfs|Pdfs)\//.test(path)) {
