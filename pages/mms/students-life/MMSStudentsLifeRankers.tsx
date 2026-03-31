@@ -68,28 +68,14 @@ export default function MMSStudentsLifeRankers() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <MMSLayout title="Loading...">
-        <div className="flex justify-center items-center min-h-[50vh]">
-          <div className="animate-pulse flex flex-col items-center gap-4">
-            <div className="w-12 h-12 rounded-full border-4 border-slate-200 border-t-brand-blue animate-spin"></div>
-            <div className="text-slate-400 font-medium tracking-widest uppercase text-sm">Loading Content...</div>
-          </div>
-        </div>
-      </MMSLayout>
-    );
-  }
-
-
-  const dynamicRankers = data?.rankers || [];
+const dynamicRankers = data?.rankers || [];
 
   const groupedRankers = useMemo(() => {
-    // Determine whether to use dynamic CMS list or default static fallbacks
-    const list = dynamicRankers.length > 0 ? dynamicRankers : fallbackData;
-    
+    // Determine whether to use dynamic CMS list or default static fallbacks    
+    const list = dynamicRankers.length > 0 ? dynamicRankers : fallbackData;     
+
     // Group records by semester key
-    const map = new Map<string, Array<{ name: string; rank: string }>>();
+    const map = new Map<string, Array<{ name: string; rank: string }>>();       
     list.forEach(r => {
       const s = r.semester || 'Achievers';
       if (!map.has(s)) map.set(s, []);
@@ -97,8 +83,21 @@ export default function MMSStudentsLifeRankers() {
     });
 
     // Return preserved order grouping array
-    return Array.from(map.entries()).map(([title, rows]) => ({ title, rows }));
+    return Array.from(map.entries()).map(([title, rows]) => ({ title, rows })); 
   }, [dynamicRankers]);
+
+  if (loading) {
+    return (
+      <MMSLayout title="Loading...">
+        <div className="flex justify-center items-center min-h-[50vh]">
+          <div className="animate-pulse flex flex-col items-center gap-4">      
+            <div className="w-12 h-12 rounded-full border-4 border-slate-200 border-t-brand-blue animate-spin"></div>
+            <div className="text-slate-400 font-medium tracking-widest uppercase text-sm">Loading Content...</div>
+          </div>
+        </div>
+      </MMSLayout>
+    );
+  }
 
   return (
     <MMSLayout title="RANKERS & ACHIEVEMENTS">
