@@ -113,6 +113,7 @@ const sectionMenus: SectionMenu[] = [
 ];
 
 export default function MMSLayout({ title, children }: MMSLayoutProps) {
+  const { pathname, hash } = useLocation();
 
   const [customEventsMenu, setCustomEventsMenu] = useState<{label: string, href: string}[]>([]);
   useEffect(() => {
@@ -135,8 +136,6 @@ export default function MMSLayout({ title, children }: MMSLayoutProps) {
     return baseActiveMenu;
   }, [baseActiveMenu, customEventsMenu]);
 
-  const { pathname, hash } = useLocation();
-  
   const showExperientialDescriptor = pathname.startsWith('/mms/experiential-learning');
   const [showPosterPopup, setShowPosterPopup] = useState(false);
 
