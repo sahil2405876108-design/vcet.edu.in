@@ -1,8 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MMSLayout from '../../../components/mms/MMSLayout';
 import { StudentsLifeImageHolder, StudentsLifeSectionCard } from './MMSStudentsLifeShared';
+import { get, resolveApiUrl } from '../../../services/api';
+import type { MMSStudentsLifeData } from '../../../admin/types';
 
 export default function MMSStudentsLifeVEcstatic() {
+  const [data, setData] = useState<MMSStudentsLifeData | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await get<{ data: MMSStudentsLifeData }>('/pages/mms-students-life');
+        setData(response.data);
+      } catch (err) {
+        console.error('Failed to fetch students life data:', err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const defaultImages = [
+    { id: 'def-1', src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-1.jpg', label: 'V-ECSTATIC 01' },
+    { id: 'def-2', src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-2.jpg', label: 'V-ECSTATIC 02' },
+    { id: 'def-3', src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-3.jpg', label: 'V-ECSTATIC 03' },
+    { id: 'def-4', src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-4.jpg', label: 'V-ECSTATIC 04' },
+  ];
+
+  const backendImages = (data?.vEcstatic?.images || []).map((img, i) => ({
+    id: `dyn-${i}`,
+    src: resolveApiUrl(img.image),
+    label: img.label || `V-ECSTATIC ${String(defaultImages.length + i + 1).padStart(2, '0')}`,
+  })).filter(img => img.src);
+
+  const allImages = [...defaultImages, ...backendImages];
+
   return (
     <MMSLayout title="V-ECSTATIC">
       <StudentsLifeSectionCard title="V-ECSTATIC" subtitle="Annual college fest celebrating talent, unity, and student expression">
@@ -16,13 +47,8 @@ export default function MMSStudentsLifeVEcstatic() {
         </p>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {[
-            { id: 1, src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-1.jpg' },
-            { id: 2, src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-2.jpg' },
-            { id: 3, src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-3.jpg' },
-            { id: 4, src: '/images/Departments/MMS(MBA)/Students life/mms-vecs-4.jpg' },
-          ].map(({ id, src }) => (
-            <StudentsLifeImageHolder key={id} label={`V-ECSTATIC ${id.toString().padStart(2, '0')}`} size="large" src={src} />
+          {allImages.map(({ id, src, label }) => (
+            <StudentsLifeImageHolder key={id} label={label} size="large" src={src} />
           ))}
         </div>
       </StudentsLifeSectionCard>
