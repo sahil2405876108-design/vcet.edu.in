@@ -1005,11 +1005,21 @@ export interface MMSStudentsLifeData {
     images: GalleryItem[];
   };
   addOnCourses: {
-    description: string;
-    topics: { text: string }[];
-    objectives: { text: string }[];
-    images: GalleryItem[];
-  };
+      description: string;
+      topics: { text: string }[];
+      objectives: { text: string }[];
+      images: GalleryItem[];
+    };
+    advanceExcel: {
+      description: string;
+      objectives: { text: string }[];
+      images: GalleryItem[];
+    };
+    powerBi: {
+      description: string;
+      objectives: { text: string }[];
+      images: GalleryItem[];
+    };
   industrySessions: {
     description: string;
     learningPoints: { text: string }[];
@@ -1110,4 +1120,7 @@ export interface NewsletterPayload {
   image?: File | null;
   pdf?: File | null;
 }
+
+
+
 
