@@ -159,15 +159,12 @@ const MMSAboutForm: React.FC = () => {
                <label className="admin-label">Description Text <span className="text-slate-400 normal-case">({form.aboutMMS?.description?.length || 0}/1200)</span></label>
                <textarea 
                   className="admin-input-small h-48 resize-none" 
-                  placeholder="Enter detailed description here... (Minimum 500 characters)" 
-                  value={form.aboutMMS?.description || ''} 
+                  placeholder="Enter detailed description here... (max 1200 chars)"
+                  value={form.aboutMMS?.description || ''}
                   onChange={e => handleTextChange(e.target.value, 1200, val => {
                     setForm({...form, aboutMMS: {...form.aboutMMS!, description: val}});
                   })}
                />
-               {(form.aboutMMS?.description?.length || 0) > 0 && (form.aboutMMS?.description?.length || 0) < 500 && (
-                 <p className="text-[10px] text-red-500 mt-1 font-bold">Minimum 500 characters required.</p>
-               )}
             </div>
           </div>
         </SectionCard>
@@ -188,15 +185,12 @@ const MMSAboutForm: React.FC = () => {
                <label className="admin-label">Message <span className="text-slate-400 normal-case">({form.principalDesk?.message?.length || 0}/1500)</span></label>
                <textarea 
                   className="admin-input-small h-48 resize-none" 
-                  placeholder="Principal's message... (800 - 1500 chars)" 
-                  value={form.principalDesk?.message || ''} 
+                  placeholder="Principal's message... (max 1500 chars)"
+                  value={form.principalDesk?.message || ''}
                   onChange={e => handleTextChange(e.target.value, 1500, val => {
                     setForm({...form, principalDesk: {...form.principalDesk!, message: val}});
                   })}
                />
-               {(form.principalDesk?.message?.length || 0) > 0 && (form.principalDesk?.message?.length || 0) < 800 && (
-                 <p className="text-[10px] text-red-500 mt-1 font-bold">Minimum 800 characters required.</p>
-               )}
             </div>
           </div>
         </SectionCard>
@@ -217,15 +211,12 @@ const MMSAboutForm: React.FC = () => {
                <label className="admin-label">Message <span className="text-slate-400 normal-case">({form.hodDesk?.message?.length || 0}/1500)</span></label>
                <textarea 
                   className="admin-input-small h-48 resize-none" 
-                  placeholder="HOD's message... (800 - 1500 chars)" 
-                  value={form.hodDesk?.message || ''} 
+                  placeholder="HOD's message... (max 1500 chars)" 
+                  value={form.hodDesk?.message || ''}
                   onChange={e => handleTextChange(e.target.value, 1500, val => {
                     setForm({...form, hodDesk: {...form.hodDesk!, message: val}});
                   })}
                />
-               {(form.hodDesk?.message?.length || 0) > 0 && (form.hodDesk?.message?.length || 0) < 800 && (
-                 <p className="text-[10px] text-red-500 mt-1 font-bold">Minimum 800 characters required.</p>
-               )}
             </div>
           </div>
         </SectionCard>
@@ -375,17 +366,17 @@ const ImageUploader = ({ image, onChange, compact = false }: { image: any, onCha
       return () => URL.revokeObjectURL(u);
     } else if (typeof image === 'string') {
         setPreview(resolveApiUrl(image));
-    } else {
-      setPreview(null);
-    }
-  }, [image]);
+      } else if (image && typeof image === 'object' && image.url) {
+        setPreview(resolveApiUrl(image.url));      } else {
+        setPreview(null);
+      }
+    }, [image]);
 
-  return (
-    <div className={`relative rounded-xl border-2 border-dashed ${preview ? 'border-blue-300' : 'border-slate-300'} bg-slate-50 overflow-hidden flex items-center justify-center hover:bg-slate-100 transition-colors cursor-pointer group ${compact ? 'h-24' : 'h-48'}`}>
-      <input type="file" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onChange={e => {
-        if (e.target.files && e.target.files.length > 0) onChange(e.target.files[0]);
-      }} />
-      {preview ? (
+    return (
+      <div className={`relative rounded-xl border-2 border-dashed ${preview ? 'border-blue-300' : 'border-slate-300'} bg-slate-50 overflow-hidden flex items-center justify-center hover:bg-slate-100 transition-colors cursor-pointer group ${compact ? 'h-24' : 'h-48'}`}>
+        <input type="file" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onChange={e => {
+          if (e.target.files && e.target.files.length > 0) onChange(e.target.files[0]);
+        }} />      {preview ? (
         <img src={preview} alt="preview" className="w-full h-full object-cover" />
       ) : (
         <div className="text-center p-4">

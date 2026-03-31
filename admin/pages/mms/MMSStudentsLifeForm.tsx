@@ -156,7 +156,7 @@ const MMSStudentsLifeForm: React.FC = () => {
                  if (file) { const newItems = [...items]; newItems[i].image = file; onChange(newItems); }
                }}/>
                {item.image ? (
-                 <img src={typeof item.image === 'string' ? item.image : URL.createObjectURL(item.image)} className="w-full h-full object-cover" alt="" />
+                 <img src={typeof item.image === 'string' ? item.image : (item.image instanceof File || item.image instanceof Blob ? URL.createObjectURL(item.image) : ((item.image as any)?.url ? (resolveApiUrl((item.image as any).url) || '') : ''))} className="w-full h-full object-cover" alt="" />
                ) : (
                 <ImageIcon className="w-6 h-6 text-slate-300" />
                )}
@@ -291,7 +291,7 @@ const MMSStudentsLifeForm: React.FC = () => {
                           if (file) { const n = [...form.rankers!]; n[i].image = file; setForm({...form, rankers: n}); }
                         }}/>
                         {ranker.image ? (
-                          <img src={typeof ranker.image === 'string' ? ranker.image : URL.createObjectURL(ranker.image)} className="w-full h-full object-cover" alt="" />
+                          <img src={typeof ranker.image === 'string' ? ranker.image : (ranker.image instanceof File || ranker.image instanceof Blob ? URL.createObjectURL(ranker.image) : ((ranker.image as any)?.url ? (resolveApiUrl((ranker.image as any).url) || '') : ''))} className="w-full h-full object-cover" alt="" />
                         ) : (
                           <User className="w-10 h-10 text-slate-300 m-auto mt-6" />
                         )}
