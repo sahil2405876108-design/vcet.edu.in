@@ -12,7 +12,9 @@ const emptyForm: MMSStudentsLifePayload = {
   bookReview: { description: '', benefits: [], images: [] },
   addOnCourses: { description: '', topics: [], objectives: [], images: [] },
   industrySessions: { description: '', learningPoints: [], sessions: [] },
-  events: [],
+  ideation: { description: '', images: [] },
+  oscillations: { description: '', images: [] },
+  nsimTraining: { description: '', images: [] },
   rankers: [],
   pdfs: []
 };
@@ -250,57 +252,35 @@ const MMSStudentsLifeForm: React.FC = () => {
         </>
       )}
 
-      {section === 'events' && (
-        <>
-          {renderSectionHeader('Events & Activities', 'IDEATHON / OSCILLATIONS / ETC')}
-          <div className="space-y-6">
-            {form.events?.map((ev, i) => (
-              <div key={i} className="bg-white rounded-[2.5rem] p-8 border border-slate-200 shadow-xl animate-fade-in group">
-                 <div className="flex justify-between items-center mb-6">
-                    <input className="text-xl font-black text-slate-800 outline-none border-b-2 border-transparent focus:border-blue-500 pb-1" value={ev.name} onChange={e => { const n = [...form.events!]; n[i].name = e.target.value; setForm({...form, events: n}); }} placeholder="Event Name..."/>
-                    <button type="button" onClick={() => setForm({...form, events: form.events!.filter((_,idx) => idx !== i)})} className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-100 transition-colors"><Trash2 className="w-5 h-5"/></button>
-                 </div>
-                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="space-y-6">
-                       {renderTextArea('Description', ev.description, 120, 200, (v) => { const n = [...form.events!]; n[i].description = v; setForm({...form, events: n}); })}
-                       {renderTextArea('Outcome', ev.outcome, 50, 160, (v) => { const n = [...form.events!]; n[i].outcome = v; setForm({...form, events: n}); })}
-                    </div>
-                    {renderGalleryEditor('Event Gallery', ev.images || [], 3, 35, (g) => { const n = [...form.events!]; n[i].images = g; setForm({...form, events: n}); })}
-                 </div>
-              </div>
-            ))}
-            {(form.events?.length || 0) < 6 && (
-              <button type="button" onClick={() => setForm({...form, events: [...(form.events || []), { name: '', description: '', outcome: '', images: [] }]})} className="w-full py-8 bg-white border-4 border-dashed border-slate-100 rounded-[2.5rem] flex flex-col items-center justify-center gap-3 text-slate-300 hover:border-blue-200 hover:text-blue-500 hover:bg-blue-50/50 transition-all group">
-                <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors"><Plus className="w-6 h-6"/></div>
-                <span className="text-sm font-black uppercase tracking-widest">Add New Event Activity</span>
-              </button>
-            )}
-          </div>
-        </>
-      )}
-
-      {section === 'rankers' && (
-        <>
-          {renderSectionHeader('Rankers & Achievements', 'TOP PERFORMER SHOWCASE')}
-          <div className="bg-white rounded-[2.5rem] p-10 border border-slate-200 shadow-xl animate-fade-in relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-2 h-full bg-blue-500" />
-            <div className="space-y-4">
-              {form.rankers?.map((ranker, i) => (
-                <div key={i} className="flex gap-4 items-center bg-slate-50 border border-slate-200 p-6 rounded-3xl transition-all hover:bg-white hover:shadow-lg">
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-sm"><Star className="w-6 h-6 text-yellow-500" /></div>
-                  <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 focus:ring-4 focus:ring-blue-100" placeholder="Student Name..." value={ranker.name} maxLength={50} onChange={e => { const n = [...form.rankers!]; n[i].name = e.target.value; setForm({...form, rankers: n}); }}/>
-                    <input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-blue-600 focus:ring-4 focus:ring-blue-100" placeholder="Rank (e.g. 1st)..." value={ranker.rank} maxLength={100} onChange={e => { const n = [...form.rankers!]; n[i].rank = e.target.value; setForm({...form, rankers: n}); }}/>
-                    <input className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-500 focus:ring-4 focus:ring-blue-100" placeholder="Semester (e.g. Semester I Rankers)" value={ranker.semester || ''} onChange={e => { const n = [...form.rankers!]; n[i].semester = e.target.value; setForm({...form, rankers: n}); }}/>
-                  </div>
-                  <button type="button" onClick={() => setForm({...form, rankers: form.rankers!.filter((_,idx) => idx !== i)})} className="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"><Trash2 className="w-5 h-5"/></button>
-                </div>
-              ))}
-              <button type="button" onClick={() => setForm({...form, rankers: [...(form.rankers || []), { name: '', rank: '', semester: '' }]})} className="w-full py-6 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl flex items-center justify-center gap-2 text-slate-400 font-bold text-xs hover:border-blue-400 hover:text-blue-500 transition-all uppercase tracking-widest"><Plus className="w-5 h-5"/> Add Ranker</button>
+      {section === 'ideation' && (
+          <>
+            {renderSectionHeader('Ideation', 'STUDENT INNOVATION')}
+            <div className="space-y-6 animate-fade-in">
+              {renderTextArea('Description', form.ideation?.description || '', 120, 200, (v) => setForm({...form, ideation: { ...form.ideation, description: v, images: form.ideation?.images || [] }} as any))}
+              {renderGalleryEditor('Ideation Gallery', form.ideation?.images || [], 5, 45, (g) => setForm({...form, ideation: { ...form.ideation, images: g, description: form.ideation?.description || '' }} as any))}
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+
+        {section === 'oscillations' && (
+          <>
+            {renderSectionHeader('Oscillations', 'ANNUAL FESTIVAL')}
+            <div className="space-y-6 animate-fade-in">
+              {renderTextArea('Description', form.oscillations?.description || '', 120, 200, (v) => setForm({...form, oscillations: { ...form.oscillations, description: v, images: form.oscillations?.images || [] }} as any))}
+              {renderGalleryEditor('Oscillations Gallery', form.oscillations?.images || [], 8, 45, (g) => setForm({...form, oscillations: { ...form.oscillations, images: g, description: form.oscillations?.description || '' }} as any))}
+            </div>
+          </>
+        )}
+
+        {section === 'nsimTraining' && (
+          <>
+            {renderSectionHeader('NSIM Training', 'SKILL DEVELOPMENT')}
+            <div className="space-y-6 animate-fade-in">
+              {renderTextArea('Description', form.nsimTraining?.description || '', 120, 200, (v) => setForm({...form, nsimTraining: { ...form.nsimTraining, description: v, images: form.nsimTraining?.images || [] }} as any))}
+              {renderGalleryEditor('Training Gallery', form.nsimTraining?.images || [], 5, 45, (g) => setForm({...form, nsimTraining: { ...form.nsimTraining, images: g, description: form.nsimTraining?.description || '' }} as any))}
+            </div>
+          </>
+        )}
 
       {section === 'pdfs' && (
         <>
@@ -346,3 +326,4 @@ const MMSStudentsLifeForm: React.FC = () => {
 };
 
 export default MMSStudentsLifeForm;
+

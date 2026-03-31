@@ -1015,12 +1015,9 @@ export interface MMSStudentsLifeData {
     learningPoints: { text: string }[];
     sessions: GalleryItem[];
   };
-  events: {
-    name: string;
-    description: string;
-    outcome: string;
-    images: GalleryItem[];
-  }[];
+  ideation: { description: string; images: GalleryItem[]; };
+    oscillations: { description: string; images: GalleryItem[]; };
+    nsimTraining: { description: string; images: GalleryItem[]; };
   rankers: {
     name: string;
     rank: string;
@@ -1112,3 +1109,4 @@ export interface NewsletterPayload {
   image?: File | null;
   pdf?: File | null;
 }
+
