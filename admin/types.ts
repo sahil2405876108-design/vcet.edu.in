@@ -1092,3 +1092,22 @@ export interface CommitteeReport {
   url?: string;
   date?: string;
 }
+
+export interface Newsletter {
+  id: number;
+  title: string;
+  description: string;
+  departmentId: string | number;
+  image: string | null;
+  pdf: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NewsletterPayload {
+  title: string;
+  description: string;
+  departmentId: string | number;
+  image?: File | null;
+  pdf?: File | null;
+}
