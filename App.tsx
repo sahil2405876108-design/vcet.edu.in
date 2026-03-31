@@ -542,7 +542,10 @@ function App() {
           <Route path="/mms/students-life/industry-expert-sessions" element={<MMSStudentsLifeIndustryExpertSessions />} />
           <Route path="/mms/students-life/nsim-training" element={<MMSStudentsLifeNSIMTraining />} />
           <Route path="/mms/students-life/oscillations" element={<MMSStudentsLifeOscillations />} />
-          <Route path="/mms/students-life/ideathon-1-0" element={<MMSStudentsLifeIdeathon />} />
+          <Route path="/mms/students-life/ideathon-1-0"
+element={<MMSStudentsLifeIdeathon />} />
+            <Route path="/mms/students-life/event/:slug"
+element={<MMSStudentsLifeCustomEvent />} />
           <Route path="/mms/students-life/rankers" element={<MMSStudentsLifeRankers />} />
           <Route path="/mms/facilities" element={<MMSFacilities />} />
           <Route path="/mms/facilities/library" element={<MMSFacilitiesLibrary />} />
@@ -628,3 +631,4 @@ function App() {
 }
 
 export default App;
+
