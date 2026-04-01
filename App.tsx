@@ -35,7 +35,6 @@ const OrganizationalStructure = lazy(() => import('./pages/about/OrganizationalS
 const Administration = lazy(() => import('./pages/about/Administration'));
 const StrategicPlan = lazy(() => import('./pages/about/StrategicPlan'));
 const CodeOfConduct = lazy(() => import('./pages/about/CodeOfConduct'));
-
 // pages/admissions
 const CoursesIntake = lazy(() => import('./pages/admissions/CoursesIntake'));
 const FeesStructure = lazy(() => import('./pages/admissions/FeesStructure'));
@@ -354,10 +353,7 @@ function App() {
             <Route path="/organizational-structure" element={<OrganizationalStructure />} />
             <Route path="/administration" element={<Administration />} />
             <Route path="/strategic-plan" element={<StrategicPlan />} />
-            <Route path="/code-of-conduct" element={<CodeOfConduct />} />
-
-            {/* Admission */}
-            <Route path="/courses-and-intake" element={<CoursesIntake />} />
+              <Route path="/code-of-conduct" element={<CodeOfConduct />} />
             <Route path="/fees-structure" element={<FeesStructure />} />
             <Route path="/scholarships" element={<Scholarships />} />
             <Route path="/brochure" element={<Brochure />} />
