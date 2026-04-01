@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { ArrowUpRight, Download, FileText, FolderOpen } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 type PdfItem = {
   title: string;
@@ -14,7 +16,7 @@ const sectionTabs = [
   { label: 'Reports', href: '#reports' },
 ];
 
-const reportPdfs: PdfItem[] = [
+const defaultReportPdfs: PdfItem[] = [
   { title: 'NIRF 2025 Engineering - VCET', year: '2025', href: 'https://vcet.edu.in/wp-content/uploads/2025/02/NIRF2025_ENGINEERING_VCET.pdf', note: 'Engineering category PDF' },
   { title: 'NIRF 2025 Management - VCET', year: '2025', href: 'https://vcet.edu.in/wp-content/uploads/2025/02/NIRF_2025_MANAGEMENT_VCET.pdf', note: 'Management category PDF' },
   { title: 'NIRF 2025 Overall - VCET', year: '2025', href: 'https://vcet.edu.in/wp-content/uploads/2025/02/NIRF2025_Overall_VCET.pdf', note: 'Overall category PDF' },
@@ -66,6 +68,32 @@ const PdfGrid: React.FC<{ items: PdfItem[] }> = ({ items }) => {
 };
 
 const NIRF: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('nirf')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const reportPdfs = useMemo(() => {
+    const cards = Array.isArray(apiData?.nirfCards)
+      ? apiData.nirfCards
+          .map((card: any) => ({
+            title: String(card?.title ?? '').trim(),
+            year: String(card?.year ?? '').trim(),
+            href: resolveUploadedAssetUrl(card?.fileUrl ?? card?.url ?? null) || '',
+            note: String(card?.note ?? '').trim(),
+          }))
+          .filter((card: PdfItem) => card.title.length > 0 && card.href.length > 0)
+      : [];
+    return cards.length > 0 ? cards : defaultReportPdfs;
+  }, [apiData]);
+
   return (
     <PageLayout>
       <PageBanner

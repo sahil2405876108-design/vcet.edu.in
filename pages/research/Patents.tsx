@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { CheckCircle2 } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
 
 /* â”€â”€ Real Patent Data â”€â”€ */
-const patents = [
+const defaultPatents = [
   {
     sr: 1,
     dept: 'Computer Engineering',
@@ -137,7 +138,7 @@ const patents = [
   },
 ];
 
-const years = ['All', '2023', '2022', '2021', '2016'];
+const defaultYears = ['All', '2023', '2022', '2021', '2016'];
 
 const officeAccent: Record<string, { bar: string; badge: string; text: string; label: string }> = {
   'Indian Patent Office':              { bar: '#1a4b7c', badge: 'bg-[#EFF4FB]',  text: 'text-[#1a4b7c]',  label: 'IND' },
@@ -146,7 +147,45 @@ const officeAccent: Record<string, { bar: string; badge: string; text: string; l
 };
 
 const ResearchPatents: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
   const [activeYear, setActiveYear] = useState('All');
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('patents')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const patents = useMemo(() => {
+    const rows = Array.isArray(apiData?.patents)
+      ? apiData.patents
+          .map((row: any, index: number) => ({
+            sr: Number.parseInt(String(row?.sno ?? row?.sr ?? index + 1), 10) || index + 1,
+            dept: String(row?.department ?? row?.dept ?? '').trim(),
+            faculty: String(row?.names ?? row?.faculty ?? '').trim(),
+            title: String(row?.title ?? '').trim(),
+            office: String(row?.office ?? '').trim(),
+            year: Number.parseInt(String(row?.year ?? ''), 10) || 0,
+            appNo: String(row?.appNo ?? '').trim(),
+            status: String(row?.status ?? '').trim(),
+          }))
+          .filter((row: any) => row.title.length > 0)
+      : [];
+    return rows.length > 0 ? rows : defaultPatents;
+  }, [apiData]);
+
+  const years = useMemo(() => {
+    const configured = Array.isArray(apiData?.patentYears)
+      ? apiData.patentYears.map((y: unknown) => String(y ?? '').trim()).filter(Boolean)
+      : [];
+    if (configured.length > 0) return ['All', ...configured];
+    const fromRows = Array.from(new Set(patents.map((p: any) => String(p.year)).filter(Boolean)));
+    return fromRows.length > 0 ? ['All', ...fromRows] : defaultYears;
+  }, [apiData, patents]);
 
   const filtered = activeYear === 'All'
     ? patents

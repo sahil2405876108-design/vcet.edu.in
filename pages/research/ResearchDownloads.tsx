@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { ArrowUpRight, ExternalLink, FileText, Link2 } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
 
-const docButtons = [
+const defaultDocButtons = [
   {
     label: 'Form for research recommendation',
     href: 'https://docs.google.com/document/d/1RqHvcqpi9CVdeQrYhDnDpt5BEEAOqR6x/view',
@@ -14,7 +15,7 @@ const docButtons = [
   },
 ];
 
-const leftLinks = [
+const defaultLeftLinks = [
   {
     label: 'UGC Care Journal List',
     href: 'https://drive.google.com/drive/folders/1PjJa_YPNtCHLhfRLkJb5YzbW9p6j7Nwe?usp=sharing',
@@ -29,7 +30,7 @@ const leftLinks = [
   { label: 'Wiley Journal Finder Link', href: 'https://journalfinder.wiley.com/search?type=match' },
 ];
 
-const rightLinks = [
+const defaultRightLinks = [
   {
     label: 'UGC Care Journal List',
     href: 'https://drive.google.com/drive/folders/1PjJa_YPNtCHLhfRLkJb5YzbW9p6j7Nwe?usp=sharing',
@@ -42,6 +43,54 @@ const rightLinks = [
 ];
 
 const ResearchDownloads: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('downloads')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const docButtons = useMemo(() => {
+    const rows = Array.isArray(apiData?.topButtons)
+      ? apiData.topButtons
+          .map((item: any) => ({
+            label: String(item?.label ?? item?.title ?? '').trim(),
+            href: String(item?.url ?? '').trim(),
+          }))
+          .filter((item: { label: string; href: string }) => item.label.length > 0 && item.href.length > 0)
+      : [];
+    return rows.length > 0 ? rows : defaultDocButtons;
+  }, [apiData]);
+
+  const leftLinks = useMemo(() => {
+    const rows = Array.isArray(apiData?.leftLinks)
+      ? apiData.leftLinks
+          .map((item: any) => ({
+            label: String(item?.label ?? item?.title ?? '').trim(),
+            href: String(item?.url ?? '').trim(),
+          }))
+          .filter((item: { label: string; href: string }) => item.label.length > 0 && item.href.length > 0)
+      : [];
+    return rows.length > 0 ? rows : defaultLeftLinks;
+  }, [apiData]);
+
+  const rightLinks = useMemo(() => {
+    const rows = Array.isArray(apiData?.rightLinks)
+      ? apiData.rightLinks
+          .map((item: any) => ({
+            label: String(item?.label ?? item?.title ?? '').trim(),
+            href: String(item?.url ?? '').trim(),
+          }))
+          .filter((item: { label: string; href: string }) => item.label.length > 0 && item.href.length > 0)
+      : [];
+    return rows.length > 0 ? rows : defaultRightLinks;
+  }, [apiData]);
+
   return (
     <PageLayout>
       <PageBanner

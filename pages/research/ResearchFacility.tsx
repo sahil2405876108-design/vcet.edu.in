@@ -2,16 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { Image as ImageIcon } from 'lucide-react';
-
-type ApiEvent = {
-  id: number;
-  title: string;
-  description: string | null;
-  image: string | null;
-  category: string | null;
-  is_active: boolean;
-  created_at?: string;
-};
+import { getResearchSection } from '../../services/research';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 type ResearchFacilityItem = {
   id: number;
@@ -44,41 +36,21 @@ const fallbackItems: ResearchFacilityItem[] = [
   },
 ];
 
-const API_BASE =
-  ((import.meta.env.VITE_API_URL as string | undefined) ?? 'https://vcet.edu.in').replace(/\/$/, '') + '/api';
-
-function isResearchFacilityCategory(category: string | null): boolean {
-  if (!category) return false;
-  const value = category.toLowerCase().trim();
-  return value === 'research facility' || value === 'research facilities' || value === 'research-facility';
-}
-
 const ResearchFacility: React.FC = () => {
   const [items, setItems] = useState<ResearchFacilityItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const controller = new AbortController();
-
     async function loadFacilities() {
       try {
-        const response = await fetch(`${API_BASE}/events`, {
-          headers: { Accept: 'application/json' },
-          signal: controller.signal,
-        });
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-        const json = (await response.json()) as { data?: ApiEvent[] };
-        const data = Array.isArray(json.data) ? json.data : [];
-
-        const mapped = data
-          .filter((event) => event.is_active && isResearchFacilityCategory(event.category))
-          .map<ResearchFacilityItem>((event) => ({
-            id: event.id,
-            title: event.title,
-            description: event.description?.trim() || 'Description will be updated soon.',
-            image: event.image,
+        const data = await getResearchSection<any>('research-facility');
+        const facilities = Array.isArray(data?.facilities) ? data.facilities : [];
+        const mapped = facilities
+          .map<ResearchFacilityItem>((facility: any, index: number) => ({
+            id: index + 1,
+            title: String(facility?.title ?? '').trim() || `Research Facility ${index + 1}`,
+            description: String(facility?.description ?? '').trim() || 'Description will be updated soon.',
+            image: resolveUploadedAssetUrl(facility?.imageUrl ?? null),
           }));
 
         setItems(mapped);
@@ -90,7 +62,6 @@ const ResearchFacility: React.FC = () => {
     }
 
     loadFacilities();
-    return () => controller.abort();
   }, []);
 
   const facilities = useMemo(() => {

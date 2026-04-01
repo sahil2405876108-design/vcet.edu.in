@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { Briefcase, TrendingUp, Zap, Download, FileText, ExternalLink } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 // ─── Revenue Trend Data (sorted chronologically) ──────────────────────────────
 interface RevenueEntry { year: string; value: number; note: 'Peak' | 'Lowest' | '' }
 
-const revenueData: RevenueEntry[] = [
+const defaultRevenueData: RevenueEntry[] = [
   { year: "'16-17", value: 0.880, note: '' },
   { year: "'17-18", value: 0.352, note: '' },
   { year: "'18-19", value: 0.348, note: '' },
@@ -22,14 +24,8 @@ const CW = 960, CH = 440;
 const PAD_L = 80, PAD_R = 24, PAD_T = 56, PAD_B = 80;
 const PLOT_W = CW - PAD_L - PAD_R;   // 856
 const PLOT_H = CH - PAD_T - PAD_B;   // 304
-const MAX_VAL = 2.72;
-const SLOT_W = PLOT_W / revenueData.length;
-const BAR_W = Math.floor(SLOT_W * 0.58);
+const DEFAULT_MAX_VAL = 2.72;
 const Y_GRID = [0.5, 1.0, 1.5, 2.0, 2.5];
-
-function bHeight(v: number) { return (v / MAX_VAL) * PLOT_H; }
-function bX(i: number) { return PAD_L + i * SLOT_W + (SLOT_W - BAR_W) / 2; }
-function bY(v: number) { return PAD_T + PLOT_H - bHeight(v); }
 
 // ─── Consultancy Portfolio ─────────────────────────────────────────────────────
 interface PortfolioItem {
@@ -42,7 +38,7 @@ interface PortfolioItem {
   imageUrl?: string;
 }
 
-const portfolio: PortfolioItem[] = [
+const defaultPortfolio: PortfolioItem[] = [
   {
     name: 'Arihant / Playtime',
     tagline: 'Playground & Water Park Equipment Provider',
@@ -125,6 +121,60 @@ const portfolio: PortfolioItem[] = [
 ];
 
 const ConsultancyProjects: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('consultancy')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const revenueData = useMemo(() => {
+    const rows = Array.isArray(apiData?.consultancyRevenue)
+      ? apiData.consultancyRevenue
+          .map((row: any) => ({
+            year: String(row?.year ?? '').trim(),
+            value: Number.parseFloat(String(row?.value ?? '0')),
+            note: (row?.note === 'Peak' || row?.note === 'Lowest' ? row.note : '') as 'Peak' | 'Lowest' | '',
+          }))
+          .filter((row: RevenueEntry) => row.year && Number.isFinite(row.value))
+      : [];
+    return rows.length > 0 ? rows : defaultRevenueData;
+  }, [apiData]);
+
+  const portfolio = useMemo(() => {
+    const cards = Array.isArray(apiData?.industryPartners)
+      ? apiData.industryPartners
+          .map((partner: any, index: number) => ({
+            name: String(partner?.name ?? '').trim(),
+            tagline: String(partner?.tagline ?? '').trim(),
+            description: String(partner?.description ?? '').trim(),
+            keywords: Array.isArray(partner?.tags) ? partner.tags.map((tag: unknown) => String(tag ?? '').trim()).filter(Boolean).slice(0, 3) : [],
+            iconBg: defaultPortfolio[index % defaultPortfolio.length]?.iconBg || 'from-slate-400 to-slate-600',
+            emoji: defaultPortfolio[index % defaultPortfolio.length]?.emoji || '🔬',
+            imageUrl: resolveUploadedAssetUrl(partner?.imageUrl ?? null) || undefined,
+          }))
+          .filter((partner: PortfolioItem) => partner.name.length > 0)
+      : [];
+    return cards.length > 0 ? cards : defaultPortfolio;
+  }, [apiData]);
+
+  const consultancyReportHref =
+    resolveUploadedAssetUrl(apiData?.consultancyReport?.fileUrl ?? apiData?.consultancyReport?.url ?? null)
+    || 'https://vcet.edu.in/wp-content/uploads/2024/06/CONSULTANCY-PROJECTS-revised.pdf';
+
+  const MAX_VAL = Math.max(DEFAULT_MAX_VAL, ...revenueData.map((d) => d.value), 1);
+  const SLOT_W = PLOT_W / Math.max(revenueData.length, 1);
+  const BAR_W = Math.floor(SLOT_W * 0.58);
+
+  function bHeight(v: number) { return (v / MAX_VAL) * PLOT_H; }
+  function bX(i: number) { return PAD_L + i * SLOT_W + (SLOT_W - BAR_W) / 2; }
+  function bY(v: number) { return PAD_T + PLOT_H - bHeight(v); }
+
   return (
     <PageLayout>
       <PageBanner
@@ -279,7 +329,7 @@ const ConsultancyProjects: React.FC = () => {
               {/* ── PDF Download Button ─────────────────────────────────── */}
               <div className="reveal mt-8 md:mt-10 border border-[#E5E7EB] bg-white w-full">
                 <a
-                  href="https://vcet.edu.in/wp-content/uploads/2024/06/CONSULTANCY-PROJECTS-revised.pdf"
+                  href={consultancyReportHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 group hover:bg-[#F7F9FC] transition-colors duration-200"

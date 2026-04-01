@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import {
@@ -6,9 +6,11 @@ import {
   Lightbulb, ArrowRight, GraduationCap, Users,
   Rocket, MessageSquare, Presentation, ShieldCheck, User,
 } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 /* ── R&D Hub Spokes ── */
-const hubSpokes = [
+const defaultHubSpokes = [
   { icon: Rocket,        title: 'Project Initiation',       description: 'Providing the motivation for undergoing research projects and building awareness about the latest developments in various fields.' },
   { icon: MessageSquare, title: 'Industry & Peer Engagement', description: 'Facilitating interactive sessions with industry experts and managing communications for R&D networking.' },
   { icon: Presentation,  title: 'Showcasing Work',           description: 'Organizing project exhibitions and competitions and assisting with research presentations and publications.' },
@@ -16,7 +18,7 @@ const hubSpokes = [
 ];
 
 /* ── Objectives ── */
-const objectives = [
+const defaultObjectives = [
   'Motivate Faculty members to undergo research projects sponsored by agencies such as AICTE, DST, University of Mumbai, industries etc.',
   'Create awareness among students about research practices in different domains and related methodology.',
   'Guide faculty and students for publications of their research work in referred journals, renowned conferences, book chapters and IPR protection.',
@@ -24,7 +26,7 @@ const objectives = [
 ];
 
 /* ── Ph.D. Pursuing (37 total) ── */
-const phdPursuing = [
+const defaultPhdPursuing = [
   { dept: 'Mechanical Engineering',  count: 10 },
   { dept: 'Information Technology',  count: 5 },
   { dept: 'Computer Engineering',    count: 5 },
@@ -35,10 +37,8 @@ const phdPursuing = [
   { dept: 'Civil Engineering',       count: 2 },
   { dept: 'MMS',                     count: 1 },
 ];
-const phdPursuingTotal = 37;
-
 /* ── Ph.D. Holders (20 total) ── */
-const phdHolders = [
+const defaultPhdHolders = [
   { dept: 'Computer Engineering',    count: 4 },
   { dept: 'Information Technology',  count: 4 },
   { dept: 'Mechanical Engineering',  count: 3 },
@@ -47,13 +47,8 @@ const phdHolders = [
   { dept: 'First Year',             count: 2 },
   { dept: 'AIDS',                    count: 1 },
 ];
-const phdHoldersTotal = 20;
-
-const maxPursuing = Math.max(...phdPursuing.map(d => d.count));
-const maxHolders  = Math.max(...phdHolders.map(d => d.count));
-
 /* ── Quick Links ── */
-const quickLinks = [
+const defaultQuickLinks = [
   { label: 'Funded Research',       href: '/funded-research',       icon: FlaskConical },
   { label: 'Publications',          href: '/publications',          icon: BookOpen },
   { label: 'Patents',               href: '/patents',               icon: Award },
@@ -63,6 +58,94 @@ const quickLinks = [
 ];
 
 const ResearchIntro: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('research-intro')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const hubSpokes = useMemo(() => {
+    const cards = Array.isArray(apiData?.hubCards)
+      ? apiData.hubCards
+          .map((card: any, index: number) => ({
+            icon: defaultHubSpokes[index % defaultHubSpokes.length]?.icon || Lightbulb,
+            title: String(card?.title ?? '').trim(),
+            description: String(card?.description ?? '').trim(),
+          }))
+          .filter((card: any) => card.title.length > 0 && card.description.length > 0)
+      : [];
+    return cards.length > 0 ? cards : defaultHubSpokes;
+  }, [apiData]);
+
+  const objectives = useMemo(() => {
+    const rows = Array.isArray(apiData?.objectives)
+      ? apiData.objectives.map((item: unknown) => String(item ?? '').trim()).filter(Boolean)
+      : [];
+    return rows.length > 0 ? rows : defaultObjectives;
+  }, [apiData]);
+
+  const phdPursuing = useMemo(() => {
+    const rows = Array.isArray(apiData?.phdPursuing)
+      ? apiData.phdPursuing
+          .map((item: any) => ({
+            dept: String(item?.department ?? '').trim(),
+            count: Number.parseInt(String(item?.count ?? '0'), 10),
+          }))
+          .filter((item: any) => item.dept.length > 0 && Number.isFinite(item.count))
+      : [];
+    return rows.length > 0 ? rows : defaultPhdPursuing;
+  }, [apiData]);
+
+  const phdHolders = useMemo(() => {
+    const rows = Array.isArray(apiData?.phdHolders)
+      ? apiData.phdHolders
+          .map((item: any) => ({
+            dept: String(item?.department ?? '').trim(),
+            count: Number.parseInt(String(item?.count ?? '0'), 10),
+          }))
+          .filter((item: any) => item.dept.length > 0 && Number.isFinite(item.count))
+      : [];
+    return rows.length > 0 ? rows : defaultPhdHolders;
+  }, [apiData]);
+
+  const phdPursuingTotal = phdPursuing.reduce((sum, row) => sum + row.count, 0);
+  const phdHoldersTotal = phdHolders.reduce((sum, row) => sum + row.count, 0);
+  const maxPursuing = Math.max(...phdPursuing.map(d => d.count), 1);
+  const maxHolders  = Math.max(...phdHolders.map(d => d.count), 1);
+
+  const quickLinks = useMemo(() => {
+    const rows = Array.isArray(apiData?.quickLinks)
+      ? apiData.quickLinks
+          .map((item: any, index: number) => ({
+            label: String(item?.label ?? item?.title ?? '').trim(),
+            href: String(item?.url ?? '').trim(),
+            icon: defaultQuickLinks[index % defaultQuickLinks.length]?.icon || FileText,
+          }))
+          .filter((item: any) => item.label.length > 0 && item.href.length > 0)
+      : [];
+    return rows.length > 0 ? rows : defaultQuickLinks;
+  }, [apiData]);
+
+  const dean = useMemo(() => {
+    const source = apiData?.dean ?? {};
+    return {
+      name: String(source?.name ?? '').trim() || 'Dr. Ashish J. Chaudhari',
+      designation: String(source?.designation ?? '').trim() || 'Associate Professor, Mechanical Engineering',
+      researchInterest:
+        String(source?.researchInterest ?? '').trim()
+        || 'I.C. Engine Combustion, Novel VCR Mechanism, Renewable Fuels, Solar Energy Capture Using Natural Resources',
+      image:
+        resolveUploadedAssetUrl(source?.imageUrl ?? null)
+        || '/images/Research/Introduction/Dr.-ASHISH-CHAUDHARI.jpg',
+    };
+  }, [apiData]);
+
   return (
     <PageLayout>
       <PageBanner
@@ -112,8 +195,8 @@ const ResearchIntro: React.FC = () => {
                 {/* Photo */}
                 <div className="aspect-[4/3] bg-[#F7F9FC] border-b border-[#E5E7EB] flex items-center justify-center overflow-hidden">
                   <img 
-                    src="/images/Research/Introduction/Dr.-ASHISH-CHAUDHARI.jpg" 
-                    alt="Dr. Ashish J. Chaudhari"
+                    src={dean.image} 
+                    alt={dean.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -123,13 +206,13 @@ const ResearchIntro: React.FC = () => {
                   <span className="inline-block text-[14px] font-bold uppercase tracking-[0.15em] px-2 py-0.5 bg-[#fdb813] text-[#1a4b7c] mb-3">
                     DEAN – Research
                   </span>
-                  <h3 className="font-display font-bold text-[#1a4b7c] text-lg leading-tight">Dr. Ashish J. Chaudhari</h3>
-                  <p className="text-[17px] text-[#6B7280] mt-1">Associate Professor, Mechanical Engineering</p>
+                  <h3 className="font-display font-bold text-[#1a4b7c] text-lg leading-tight">{dean.name}</h3>
+                  <p className="text-[17px] text-[#6B7280] mt-1">{dean.designation}</p>
 
                   <div className="mt-4 border-t border-dashed border-[#E5E7EB] pt-3">
                     <p className="text-[14px] font-bold uppercase tracking-[0.2em] text-[#6B7280] mb-1.5">Research Interest</p>
                     <p className="text-[17px] text-[#1A1A1A]/70 leading-relaxed">
-                      I.C. Engine Combustion, Novel VCR Mechanism, Renewable Fuels, Solar Energy Capture Using Natural Resources
+                      {dean.researchInterest}
                     </p>
                   </div>
                 </div>

@@ -143,8 +143,6 @@ const researchEditables = [
   { slug: 'patents', title: 'Patents', description: 'Intellectual property and patent records.' },
   { slug: 'consultancy', title: 'Consultancy Projects', description: 'Industry projects and revenue datasets.' },
   { slug: 'research-facility', title: 'Research Facility', description: 'Infrastructure and specialized R&D labs.' },
-  { slug: 'conventions', title: 'Research Conventions', description: 'Institutional research convention documents.' },
-  { slug: 'research-policy', title: 'Research Policy', description: 'Institutional R&D policies and guidelines.' },
   { slug: 'iic', title: 'IIC', description: 'Innovation cell achievements and reports.' },
   { slug: 'nirf', title: 'NIRF', description: 'NIRF ranking documents and reports.' },
   { slug: 'downloads', title: 'Downloads', description: 'Research-related downloadable forms.' },
