@@ -584,6 +584,8 @@ Your commit history tells the story of this project. Write commit messages as if
 
 This project is built by an amazing team of developers committed to creating a website for VCET. Special thanks to:
 
+### Core Development Team
+
 | # | Contributor | GitHub |
 |---|-------------|--------|
 | 1 | **frag2win**/**shubham pawar** | [@frag2win](https://github.com/frag2win) |
@@ -591,6 +593,11 @@ This project is built by an amazing team of developers committed to creating a w
 | 3 | **yashhh-23** | [@yashhh-23](https://github.com/yashhh-23) |
 | 4 | **RedRex101** | [@RedRex101](https://github.com/RedRex101) |
 | 5 | **ivory-26** | [@ivory-26](https://github.com/ivory-26) |
+
+### Additional Contributors
+
+| # | Contributor | GitHub |
+|---|-------------|--------|
 | 6 | **sawantshreya008** | [@sawantshreya008](https://github.com/sawantshreya008) |
 | 7 | **sumritasawant101-droid** | [@sumritasawant101-droid](https://github.com/sumritasawant101-droid) |
 | 8 | **dakshata2405956201-svg** | [@dakshata2405956201-svg](https://github.com/dakshata2405956201-svg) |
