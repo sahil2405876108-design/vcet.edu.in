@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { BookOpen, FileText, ExternalLink, BarChart3, TrendingUp, Calendar } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 /* ── Books Published Data ── */
-const booksPublished = [
+const defaultBooksPublished = [
   { year: '2014-15', count: 1 },
   { year: '2017-18', count: 1 },
   { year: '2018-19', count: 4 },
@@ -13,23 +15,75 @@ const booksPublished = [
   { year: '2021-22', count: 11 },
   { year: '2022-23', count: 24 },
 ];
-const maxBooks = Math.max(...booksPublished.map(d => d.count));
-const totalBooks = booksPublished.reduce((s, d) => s + d.count, 0);
-const peakBookYear = booksPublished.reduce((a, b) => (b.count > a.count ? b : a));
+const defaultPublicationPdfs = [
+  'https://vcet.edu.in/wp-content/uploads/2024/06/BOOKS-PUBLISHED1.pdf',
+  'https://vcet.edu.in/wp-content/uploads/2024/04/CONFERENCE-PUBLICATIONS-R1.pdf',
+  'https://vcet.edu.in/wp-content/uploads/2024/04/JOURNAL-PAPER-PUBLICATION.pdf',
+];
 
 /* ── Journal & Conference Papers Data ── */
-const papersPublished = [
+const defaultPapersPublished = [
   { year: '2023', journal: 6,  conference: 47 },
   { year: '2022', journal: 15, conference: 18 },
   { year: '2021', journal: 9,  conference: 26 },
   { year: '2020', journal: 3,  conference: 113 },
   { year: '2019', journal: 20, conference: 15 },
 ];
-const maxPapers = Math.max(...papersPublished.map(d => Math.max(d.journal, d.conference)));
-const totalJournal = papersPublished.reduce((s, d) => s + d.journal, 0);
-const totalConference = papersPublished.reduce((s, d) => s + d.conference, 0);
-
 const Publications: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('publications')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const booksPublished = useMemo(() => {
+    const rows = Array.isArray(apiData?.books)
+      ? apiData.books
+          .map((row: any) => ({
+            year: String(row?.year ?? '').trim(),
+            count: Number.parseInt(String(row?.count ?? '0'), 10),
+          }))
+          .filter((row: { year: string; count: number }) => row.year && Number.isFinite(row.count))
+      : [];
+    return rows.length > 0 ? rows : defaultBooksPublished;
+  }, [apiData]);
+
+  const papersPublished = useMemo(() => {
+    const rows = Array.isArray(apiData?.journals)
+      ? apiData.journals
+          .map((row: any) => ({
+            year: String(row?.year ?? '').trim(),
+            journal: Number.parseInt(String(row?.journalCount ?? '0'), 10),
+            conference: Number.parseInt(String(row?.conferenceCount ?? '0'), 10),
+          }))
+          .filter((row: { year: string; journal: number; conference: number }) => row.year && Number.isFinite(row.journal) && Number.isFinite(row.conference))
+      : [];
+    return rows.length > 0 ? rows : defaultPapersPublished;
+  }, [apiData]);
+
+  const publicationPdfs = useMemo(() => {
+    const urls = (Array.isArray(apiData?.publicationPdfs) ? apiData.publicationPdfs : [])
+      .map((item: any) => resolveUploadedAssetUrl(item?.fileUrl ?? item?.url ?? null) || item?.fileUrl || item?.url || '')
+      .filter((url: string) => typeof url === 'string' && url.trim().length > 0);
+    return [
+      urls[0] || defaultPublicationPdfs[0],
+      urls[1] || defaultPublicationPdfs[1],
+      urls[2] || defaultPublicationPdfs[2],
+    ];
+  }, [apiData]);
+
+  const maxBooks = Math.max(...booksPublished.map(d => d.count), 1);
+  const totalBooks = booksPublished.reduce((s, d) => s + d.count, 0);
+  const peakBookYear = booksPublished.reduce((a, b) => (b.count > a.count ? b : a), booksPublished[0]);
+  const totalJournal = papersPublished.reduce((s, d) => s + d.journal, 0);
+  const totalConference = papersPublished.reduce((s, d) => s + d.conference, 0);
+
   return (
     <PageLayout>
       <PageBanner
@@ -134,7 +188,7 @@ const Publications: React.FC = () => {
           {/* Books Published PDF Button */}
           <div className="reveal mt-8 md:mt-10 border border-[#E5E7EB] bg-white">
             <a
-              href="https://vcet.edu.in/wp-content/uploads/2024/06/BOOKS-PUBLISHED1.pdf"
+              href={publicationPdfs[0]}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 group hover:bg-[#F7F9FC] transition-colors duration-200"
@@ -167,7 +221,7 @@ const Publications: React.FC = () => {
           {/* Conference Publications PDF Button */}
           <div className="reveal mb-8 md:mb-10 border border-[#E5E7EB] bg-white">
             <a
-              href="https://vcet.edu.in/wp-content/uploads/2024/04/CONFERENCE-PUBLICATIONS-R1.pdf"
+              href={publicationPdfs[1]}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 group hover:bg-[#F7F9FC] transition-colors duration-200"
@@ -313,7 +367,7 @@ const Publications: React.FC = () => {
           {/* Journal Publications PDF Button */}
           <div className="reveal mt-8 md:mt-10 border border-[#E5E7EB] bg-white">
             <a
-              href="https://vcet.edu.in/wp-content/uploads/2024/04/JOURNAL-PAPER-PUBLICATION.pdf"
+              href={publicationPdfs[2]}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 group hover:bg-[#F7F9FC] transition-colors duration-200"

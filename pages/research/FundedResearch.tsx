@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import { IndianRupee, Calendar, TrendingUp, BarChart3, FileText, ExternalLink } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 /* ── Funding Data (Govt & Non-Govt Agencies) ── */
-const fundingByYear = [
+const defaultFundingByYear = [
   { year: '2013-14', amount: 0.45 },
   { year: '2014-15', amount: 0.75 },
   { year: '2015-16', amount: 25.22 },
@@ -15,11 +17,42 @@ const fundingByYear = [
   { year: '2021-22', amount: 13.84 },
   { year: '2022-23', amount: 4.06 },
 ];
-const maxFunding = Math.max(...fundingByYear.map(d => d.amount));
-const totalFunding = fundingByYear.reduce((s, d) => s + d.amount, 0);
-const peakYear = fundingByYear.reduce((a, b) => (b.amount > a.amount ? b : a));
+const defaultFundingReportHref = 'https://vcet.edu.in/wp-content/uploads/2024/06/RESEARCH-FUNDING1.pdf';
 
 const FundedResearch: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('funded-research')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const fundingByYear = useMemo(() => {
+    const rows = Array.isArray(apiData?.funding)
+      ? apiData.funding
+          .map((row: any) => ({
+            year: String(row?.year ?? '').trim(),
+            amount: Number.parseFloat(String(row?.amount ?? '0')),
+          }))
+          .filter((row: { year: string; amount: number }) => row.year && Number.isFinite(row.amount))
+      : [];
+
+    return rows.length > 0 ? rows : defaultFundingByYear;
+  }, [apiData]);
+
+  const fundingReportHref =
+    resolveUploadedAssetUrl(apiData?.fundingReport?.fileUrl ?? apiData?.fundingReport?.url ?? null)
+    || defaultFundingReportHref;
+
+  const maxFunding = Math.max(...fundingByYear.map(d => d.amount), 1);
+  const totalFunding = fundingByYear.reduce((s, d) => s + d.amount, 0);
+  const peakYear = fundingByYear.reduce((a, b) => (b.amount > a.amount ? b : a), fundingByYear[0]);
+
   return (
     <PageLayout>
       <PageBanner
@@ -158,7 +191,7 @@ const FundedResearch: React.FC = () => {
           {/* Detailed Report Button */}
           <div className="reveal mt-8 md:mt-10 border border-[#E5E7EB] bg-white">
             <a
-              href="https://vcet.edu.in/wp-content/uploads/2024/06/RESEARCH-FUNDING1.pdf"
+              href={fundingReportHref}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 group hover:bg-[#F7F9FC] transition-colors duration-200"

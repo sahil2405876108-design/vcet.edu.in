@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageLayout from '../../components/PageLayout';
 import PageBanner from '../../components/PageBanner';
 import {
@@ -12,6 +12,8 @@ import {
   Lightbulb,
   Target,
 } from 'lucide-react';
+import { getResearchSection } from '../../services/research';
+import { resolveUploadedAssetUrl } from '../../utils/uploadedAssets';
 
 const sectionTabs = [
   { id: 'about', label: 'About', href: '#about' },
@@ -53,19 +55,19 @@ const stakeholderItems = [
   },
 ];
 
-const achievementHolders = [
+const defaultAchievementHolders = [
   { title: 'IIC Achievement 1', image: '/Images/Research/IIC/IIC-achievement1-1024x576.jpg' },
   { title: 'IIC Achievement 2', image: '/Images/Research/IIC/IIC-achievement2-1024x576.jpg' },
 ];
 
-const galleryHolders = Array.from({ length: 10 }, (_, index) => `IIC Gallery ${String(index + 1).padStart(2, '0')}`);
+const defaultGalleryHolders = Array.from({ length: 10 }, (_, index) => `IIC Gallery ${String(index + 1).padStart(2, '0')}`);
 
-const reportPdfs = [
+const defaultReportPdfs = [
   { label: '2022-2023', href: 'https://vcet.edu.in/wp-content/uploads/2024/07/IIC-REPORT5.0_22-23-_final.pdf' },
   { label: '2020-2021', href: 'https://vcet.edu.in/wp-content/uploads/2024/07/IIC-Annual-Report-2020-21.pdf' },
 ];
 
-const staffCommitteeRows = [
+const defaultStaffCommitteeRows = [
   { left: 'President', right: 'Dr. Ashish J. Chaudhari' },
   { left: 'Vice President', right: 'Mr. Abhimanyu Raja, Director, M/s. Janyu-Tech Technologies, Vasai' },
   { left: 'Convenor', right: 'Dr. Madhavi Waghmare' },
@@ -78,7 +80,7 @@ const staffCommitteeRows = [
   { left: 'Members (Faculty)', right: 'Mr. Yogesh Pingle; Mrs. Poonam Surange, Counselling Psychologist' },
 ];
 
-const expertRows = [
+const defaultExpertRows = [
   { left: 'IP Expert/Patent Expert', right: 'Mr. Parvez Kudrolli, IPR Attorney, Khurana and Khurana IPR Advocates, Mumbai' },
   { left: 'Start-up / Alumni Entrepreneur', right: 'Mr. Hemant Isai, M/s. Genesis Engineering Solutions Pvt. Ltd., Vasai' },
   {
@@ -92,13 +94,13 @@ const expertRows = [
   },
 ];
 
-const supportStaffRows = [
+const defaultSupportStaffRows = [
   { left: 'Mr. Nilesh Patil', right: 'Internet Centre' },
   { left: 'Mr. Kalpak Patil', right: 'I.T.' },
   { left: 'Mr. Sashikant Patil', right: 'Mech' },
 ];
 
-const studentRepresentationRows = [
+const defaultStudentRepresentationRows = [
   { left: 'Innovation Coordinator', right: 'Deeksha Shetty' },
   { left: 'Start-up Coordinator', right: 'Gaurang Thakur' },
   { left: 'Internship Coordinator', right: 'Kimaya Salunkhe' },
@@ -151,7 +153,18 @@ const TeamTable: React.FC<TeamTableProps> = ({ title, leftHeader, rightHeader, r
 };
 
 const ResearchIIC: React.FC = () => {
+  const [apiData, setApiData] = useState<any>(null);
   const [activeSection, setActiveSection] = useState('about');
+
+  useEffect(() => {
+    let mounted = true;
+    getResearchSection<any>('iic')
+      .then((res) => mounted && setApiData(res))
+      .catch(() => mounted && setApiData(null));
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     const sectionIds = sectionTabs.map((tab) => tab.id);
@@ -189,6 +202,49 @@ const ResearchIIC: React.FC = () => {
       window.removeEventListener('hashchange', updateActiveSection);
     };
   }, []);
+
+  const achievementHolders = useMemo(() => {
+    const rows = Array.isArray(apiData?.iicAchievementsDetailed)
+      ? apiData.iicAchievementsDetailed
+          .map((item: any, index: number) => ({
+            title: String(item?.title ?? '').trim() || `IIC Achievement ${index + 1}`,
+            image: resolveUploadedAssetUrl(item?.imageUrl ?? null),
+          }))
+          .filter((item: any) => item.title.length > 0)
+      : [];
+    return rows.length > 0 ? rows : defaultAchievementHolders;
+  }, [apiData]);
+
+  const galleryHolders = useMemo(() => {
+    const rows = Array.isArray(apiData?.iicGalleryDetailed)
+      ? apiData.iicGalleryDetailed
+          .map((item: any, index: number) => ({
+            label: String(item?.label ?? '').trim() || `IIC Gallery ${String(index + 1).padStart(2, '0')}`,
+            image: resolveUploadedAssetUrl(item?.imageUrl ?? null),
+          }))
+      : [];
+    return rows.length > 0
+      ? rows
+      : defaultGalleryHolders.map((label) => ({ label, image: null as string | null }));
+  }, [apiData]);
+
+  const reportPdfs = useMemo(() => {
+    const rows = Array.isArray(apiData?.iicReportsDetailed)
+      ? apiData.iicReportsDetailed
+          .map((item: any) => ({
+            label: String(item?.label ?? '').trim(),
+            href: resolveUploadedAssetUrl(item?.fileUrl ?? item?.url ?? null) || '',
+          }))
+          .filter((item: { label: string; href: string }) => item.label.length > 0 && item.href.length > 0)
+      : [];
+    return rows.length > 0 ? rows : defaultReportPdfs;
+  }, [apiData]);
+
+  const committeeGroups = apiData?.iicCommitteeGroups ?? {};
+  const staffCommitteeRows = (Array.isArray(committeeGroups?.staff) && committeeGroups.staff.length > 0) ? committeeGroups.staff : defaultStaffCommitteeRows;
+  const expertRows = (Array.isArray(committeeGroups?.expert) && committeeGroups.expert.length > 0) ? committeeGroups.expert : defaultExpertRows;
+  const supportStaffRows = (Array.isArray(committeeGroups?.support) && committeeGroups.support.length > 0) ? committeeGroups.support : defaultSupportStaffRows;
+  const studentRepresentationRows = (Array.isArray(committeeGroups?.student) && committeeGroups.student.length > 0) ? committeeGroups.student : defaultStudentRepresentationRows;
 
   return (
     <PageLayout>
@@ -369,12 +425,16 @@ const ResearchIIC: React.FC = () => {
             <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#F8FAFC]/95 via-[#F8FAFC]/88 to-transparent backdrop-blur-[10px] z-10" />
             <div className="flex gap-4 w-max iic-marquee">
               {[...galleryHolders, ...galleryHolders].map((item, index) => (
-                <div key={`${item}-${index}`} className="w-[250px] md:w-[280px] bg-white border border-[#DCE6F2] shadow-[0_4px_14px_rgba(15,23,42,0.06)]">
-                  <div className="aspect-[16/10] bg-[#EDF4FB] flex items-center justify-center">
-                    <Image className="w-8 h-8 text-[#1A4B7C]/35" />
+                <div key={`${item.label}-${index}`} className="w-[250px] md:w-[280px] bg-white border border-[#DCE6F2] shadow-[0_4px_14px_rgba(15,23,42,0.06)]">
+                  <div className="aspect-[16/10] bg-[#EDF4FB] flex items-center justify-center overflow-hidden">
+                    {item.image ? (
+                      <img src={item.image} alt={item.label} className="w-full h-full object-cover" />
+                    ) : (
+                      <Image className="w-8 h-8 text-[#1A4B7C]/35" />
+                    )}
                   </div>
                   <div className="px-3 py-2.5 border-t border-[#E5ECF5]">
-                    <p className="text-[13px] font-semibold text-[#1A4B7C] text-center">{item}</p>
+                    <p className="text-[13px] font-semibold text-[#1A4B7C] text-center">{item.label}</p>
                   </div>
                 </div>
               ))}
