@@ -264,65 +264,38 @@ const Library: React.FC = () => {
                       />
                       
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
-                        {/* Reading Room Module */}
-                        <motion.div 
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          whileHover={{ y: -2 }}
-                          transition={{ 
-                             delay: 0.1,
-                             duration: 0.6,
-                             ease: [0.22, 1, 0.36, 1] 
-                          }}
-                          className="bg-white border border-slate-200 border-l-8 border-l-brand-navy shadow-sm relative overflow-hidden group"
-                        >
-                           <div className="p-8">
-                              <div className="mb-6">
-                                 <h3 className="text-2xl font-bold text-brand-navy uppercase tracking-tight" style={{ fontFamily: C.serif }}>Reading Room</h3>
-                                 <p className="text-[10px] font-bold text-brand-gold uppercase tracking-widest">Academic Study Space</p>
-                              </div>
+                        {librarySections.slice(0, 2).map((section, idx) => (
+                          <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            whileHover={{ y: -2 }}
+                            transition={{ 
+                               delay: 0.1 * (idx + 1),
+                               duration: 0.6,
+                               ease: [0.22, 1, 0.36, 1] 
+                            }}
+                            className={`bg-white border border-slate-200 border-l-8 ${idx === 0 ? 'border-l-brand-navy' : 'border-l-brand-gold'} shadow-sm relative overflow-hidden group`}
+                          >
+                             <div className="p-8">
+                                <div className="mb-6">
+                                   <h3 className="text-2xl font-bold text-brand-navy uppercase tracking-tight" style={{ fontFamily: C.serif }}>{section.heading}</h3>
+                                   <p className="text-[10px] font-bold text-brand-gold uppercase tracking-widest">{idx === 0 ? 'Academic Study Space' : 'Home Issue Counter'}</p>
+                                </div>
 
-                              <div className="space-y-4 border-t border-slate-100 pt-6">
-                                 <div className="flex justify-between items-center group/time">
-                                    <span className="text-lg font-bold text-slate-500 group-hover:text-brand-navy transition-colors" style={{ fontFamily: C.body }}>Monday – Saturday</span>
-                                    <span className="text-2xl font-bold text-brand-navy" style={{ fontFamily: C.serif }}>08:00 AM – 08:00 PM</span>
-                                 </div>
-                                 <div className="bg-slate-50 p-4 border-l-2 border-brand-gold italic text-sm text-slate-500">
-                                    Access to quiet study zones and digital repository connection.
-                                 </div>
-                              </div>
-                           </div>
-                        </motion.div>
-
-                        {/* Circulation Counter Module */}
-                        <motion.div 
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          whileHover={{ y: -2 }}
-                          transition={{ 
-                             delay: 0.2,
-                             duration: 0.6,
-                             ease: [0.22, 1, 0.36, 1] 
-                          }}
-                          className="bg-white border border-slate-200 border-l-8 border-l-brand-gold shadow-sm relative overflow-hidden group"
-                        >
-                           <div className="p-8">
-                              <div className="mb-6">
-                                 <h3 className="text-2xl font-bold text-brand-navy uppercase tracking-tight" style={{ fontFamily: C.serif }}>Circulation Desk</h3>
-                                 <p className="text-[10px] font-bold text-brand-gold uppercase tracking-widest">Home Issue Counter</p>
-                              </div>
-
-                              <div className="space-y-4 border-t border-slate-100 pt-6">
-                                 <div className="flex justify-between items-center group/time">
-                                    <span className="text-lg font-bold text-slate-500 group-hover:text-brand-navy transition-colors" style={{ fontFamily: C.body }}>Monday – Friday</span>
-                                    <span className="text-2xl font-bold text-brand-navy" style={{ fontFamily: C.serif }}>08:30 AM – 06:00 PM</span>
-                                 </div>
-                                 <div className="bg-slate-50 p-4 border-l-2 border-brand-navy italic text-sm text-slate-500">
-                                    Book returns, renewals, and new membership inquiries.
-                                 </div>
-                              </div>
-                           </div>
-                        </motion.div>
+                                <div className="space-y-4 border-t border-slate-100 pt-6">
+                                   <div className="flex flex-col gap-2 group/time">
+                                      <span className="text-lg font-bold text-brand-navy" style={{ fontFamily: C.serif }}>{section.paragraph}</span>
+                                   </div>
+                                   <div className={`bg-slate-50 p-4 border-l-2 ${idx === 0 ? 'border-brand-gold' : 'border-brand-navy'} italic text-sm text-slate-500`}>
+                                      {idx === 0 
+                                        ? 'Access to quiet study zones and digital repository connection.'
+                                        : 'Book returns, renewals, and new membership inquiries.'}
+                                   </div>
+                                </div>
+                             </div>
+                          </motion.div>
+                        ))}
                       </div>
 
                       {/* Operational Notice */}
